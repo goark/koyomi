@@ -56,14 +56,14 @@ func WithEndDate(end DateJp) optFunc {
 	}
 }
 
-//Import returns koyomi data from calendar dources
-func (s *Source) Import() (*Koyomi, error) {
+//Get returns koyomi data from calendar dources
+func (s *Source) Get() (*Koyomi, error) {
 	kall := newKoyomi()
 	if len(s.tempDir) > 0 {
 		ics.FilePath = s.tempDir
 	}
 	for _, cid := range s.cids {
-		k, err := importFrom(cid, s.start, s.end)
+		k, err := getFrom(cid, s.start, s.end)
 		if err != nil {
 			return nil, errs.Wrap(err, "")
 		}
@@ -72,7 +72,7 @@ func (s *Source) Import() (*Koyomi, error) {
 	return kall, nil
 }
 
-func importFrom(cid CalendarID, start, end DateJp) (*Koyomi, error) {
+func getFrom(cid CalendarID, start, end DateJp) (*Koyomi, error) {
 	url := cid.URL()
 	if len(url) == 0 {
 		return nil, errs.Wrap(ecode.ErrNoData, "", errs.WithContext("cid", cid), errs.WithContext("start", start), errs.WithContext("end", end))

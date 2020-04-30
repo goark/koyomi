@@ -1,5 +1,10 @@
 # [koyomi] -- 日本のこよみ
 
+[![Build Status](https://travis-ci.org/spiegel-im-spiegel/koyomi.svg?branch=master)](https://travis-ci.org/spiegel-im-spiegel/koyomi)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/koyomi/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/koyomi.svg)](https://github.com/spiegel-im-spiegel/koyomi/releases/latest)
+
+
 ## Usage
 
 ```go
@@ -9,7 +14,7 @@ k, err := koyomi.NewSource(
     koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
     koyomi.WithStartDate(start),
     koyomi.WithEndDate(end),
-).Import()
+).Get()
 if err != nil {
     return
 }

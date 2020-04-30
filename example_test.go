@@ -15,7 +15,7 @@ func ExampleKoyomi() {
 		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
 		koyomi.WithStartDate(start),
 		koyomi.WithEndDate(end),
-	).Import()
+	).Get()
 	if err != nil {
 		return
 	}
