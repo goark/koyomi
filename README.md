@@ -4,6 +4,19 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/koyomi/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/koyomi.svg)](https://github.com/spiegel-im-spiegel/koyomi/releases/latest)
 
+「[国立天文台 天文情報センター 暦計算室](http://eco.mtk.nao.ac.jp/koyomi/)」より日本の暦情報を取得する [Go 言語]用パッケージです。 Google Calendar を経由して取得しています。
+
+取得可能な情報は以下の通りです。
+
+```go
+const (
+    Holiday   CalendarID = iota + 1 //国民の祝日および休日
+    MoonPhase                       //朔弦望
+    SolarTerm                       //二十四節気・雑節
+    Eclipse                         //日食・月食・日面経過
+    Planet                          //惑星現象
+)
+```
 
 ## Usage
 
@@ -37,4 +50,5 @@ io.Copy(os.Stdout, bytes.NewReader(csv))
 //"2019-05-21","小満"
 ```
 
+[Go 言語]: https://golang.org/ "The Go Programming Language"
 [koyomi]: https://github.com/spiegel-im-spiegel/koyomi "spiegel-im-spiegel/koyomi: 日本のこよみ"
