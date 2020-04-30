@@ -1,0 +1,6 @@
+github.com/PuloV/ics-golang v0.0.0-20190808201353-a3394d3bcade h1:odEkSCl2gLWPtvraEdCyBZbeYyMMTysWPLMurnB8sUY=
+github.com/PuloV/ics-golang v0.0.0-20190808201353-a3394d3bcade/go.mod h1:f1P3hjG+t54/IrnXMnnw+gRmFCDR/ryj9xSQ7MPMkQw=
+github.com/channelmeter/iso8601duration v0.0.0-20150204201828-8da3af7a2a61 h1:o64h9XF42kVEUuhuer2ehqrlX8rZmvQSU0+Vpj1rF6Q=
+github.com/channelmeter/iso8601duration v0.0.0-20150204201828-8da3af7a2a61/go.mod h1:Rp8e0DCtEKwXFOC6JPJQVTz8tuGoGvw6Xfexggh/ed0=
+github.com/spiegel-im-spiegel/errs v0.4.0 h1:ypvKyYHPT/pCYqgLtO1saycLtTYeam1gtwuYRRKSx3s=
+github.com/spiegel-im-spiegel/errs v0.4.0/go.mod h1:NwHSe6m3oAhRj2bAkkbzz9xAffIDNcP9uTdyJd9fJNs=
