@@ -42,13 +42,6 @@ func WithStartDate(start DateJp) optFunc {
 	}
 }
 
-//WithTempDir returns function for setting Reader
-func WithTempDir(dir string) optFunc {
-	return func(s *Source) {
-		s.tempDir = dir
-	}
-}
-
 //WithEndDate returns function for setting Reader
 func WithEndDate(end DateJp) optFunc {
 	return func(s *Source) {
@@ -56,29 +49,41 @@ func WithEndDate(end DateJp) optFunc {
 	}
 }
 
+//WithTempDir returns function for setting Reader
+func WithTempDir(dir string) optFunc {
+	return func(s *Source) {
+		s.tempDir = dir
+	}
+}
+
 //Get returns koyomi data from calendar dources
 func (s *Source) Get() (*Koyomi, error) {
-	kall := newKoyomi()
+	if s == nil {
+		return nil, errs.Wrap(ecode.ErrNullPointer, "")
+	}
+	if len(s.cids) == 0 {
+		return nil, errs.Wrap(ecode.ErrNoData, "")
+	}
+	k := newKoyomi()
 	if len(s.tempDir) > 0 {
 		ics.FilePath = s.tempDir
 	}
 	for _, cid := range s.cids {
-		k, err := getFrom(cid, s.start, s.end)
+		es, err := getFrom(cid, s.start, s.end)
 		if err != nil {
 			return nil, errs.Wrap(err, "")
 		}
-		kall.Add(k)
+		k.append(es...)
 	}
-	return kall, nil
+	k.SortByDate()
+	return k, nil
 }
 
-func getFrom(cid CalendarID, start, end DateJp) (*Koyomi, error) {
+func getFrom(cid CalendarID, start, end DateJp) ([]Event, error) {
 	url := cid.URL()
 	if len(url) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData, "", errs.WithContext("cid", cid), errs.WithContext("start", start), errs.WithContext("end", end))
+		return nil, errs.Wrap(ecode.ErrNoData, "", errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
 	}
-	k := newKoyomi()
-
 	parser := ics.New()
 	pch := parser.GetInputChan()
 	pch <- url
@@ -86,22 +91,31 @@ func getFrom(cid CalendarID, start, end DateJp) (*Koyomi, error) {
 
 	calendars, err := parser.GetCalendars()
 	if err != nil {
-		return nil, errs.Wrap(err, "", errs.WithContext("cid", cid), errs.WithContext("start", start), errs.WithContext("end", end))
+		return nil, errs.Wrap(err, "", errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
 	}
+	kevts := []Event{}
 	for _, calendar := range calendars {
 		for _, evt := range calendar.GetEvents() {
 			e := Event{Date: NewDate(evt.GetStart()), Title: evt.GetSummary()}
-			if !start.IsZero() && e.Date.Before(start) {
-				continue
+			if boundaryIn(e, start, end) {
+				kevts = append(kevts, e)
 			}
-			if !end.IsZero() && e.Date.After(end) {
-				continue
-			}
-			k.append(e)
-
 		}
 	}
-	return k, nil
+	return kevts, nil
+}
+
+func boundaryIn(e Event, start, end DateJp) bool {
+	if e.Date.IsZero() {
+		return false
+	}
+	if !start.IsZero() && e.Date.Before(start) {
+		return false
+	}
+	if !end.IsZero() && e.Date.After(end) {
+		return false
+	}
+	return true
 }
 
 /* Copyright 2020 Spiegel
