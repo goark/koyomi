@@ -59,10 +59,10 @@ func WithTempDir(dir string) optFunc {
 //Get returns koyomi data from calendar dources
 func (s *Source) Get() (*Koyomi, error) {
 	if s == nil {
-		return nil, errs.Wrap(ecode.ErrNullPointer, "")
+		return nil, errs.WrapWithCause(ecode.ErrNullPointer, nil)
 	}
 	if len(s.cids) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData, "")
+		return nil, errs.WrapWithCause(ecode.ErrNoData, nil)
 	}
 	k := newKoyomi()
 	if len(s.tempDir) > 0 {
@@ -71,7 +71,7 @@ func (s *Source) Get() (*Koyomi, error) {
 	for _, cid := range s.cids {
 		es, err := getFrom(cid, s.start, s.end)
 		if err != nil {
-			return nil, errs.Wrap(err, "")
+			return nil, errs.WrapWithCause(err, nil)
 		}
 		k.append(es...)
 	}
@@ -82,7 +82,7 @@ func (s *Source) Get() (*Koyomi, error) {
 func getFrom(cid CalendarID, start, end DateJp) ([]Event, error) {
 	url := cid.URL()
 	if len(url) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData, "", errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
+		return nil, errs.WrapWithCause(ecode.ErrNoData, nil, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
 	}
 	parser := ics.New()
 	pch := parser.GetInputChan()
