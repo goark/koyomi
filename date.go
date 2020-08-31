@@ -41,7 +41,7 @@ func DateFrom(s string) (DateJp, error) {
 	var lastErr error
 	for _, tmplt := range timeTemplate {
 		if tm, err := time.Parse(tmplt, s); err != nil {
-			lastErr = errs.WrapWithCause(err, nil, errs.WithContext("time_string", s), errs.WithContext("time_template", tmplt))
+			lastErr = errs.Wrap(err, errs.WithContext("time_string", s), errs.WithContext("time_template", tmplt))
 		} else {
 			return NewDate(tm), nil
 		}

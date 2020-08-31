@@ -63,24 +63,24 @@ func (k *Koyomi) append(e ...Event) {
 
 func (k *Koyomi) EncodeJSON() ([]byte, error) {
 	if k == nil || len(k.events) == 0 {
-		return nil, errs.WrapWithCause(ecode.ErrNoData, nil)
+		return nil, errs.Wrap(ecode.ErrNoData)
 	}
 	return json.Marshal(k.events)
 }
 
 func (k *Koyomi) EncodeCSV() ([]byte, error) {
 	if k == nil || len(k.events) == 0 {
-		return nil, errs.WrapWithCause(ecode.ErrNoData, nil)
+		return nil, errs.Wrap(ecode.ErrNoData)
 	}
 	buf := &bytes.Buffer{}
 	_, err := buf.WriteString(`"Date","Title"` + "\n")
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	for _, e := range k.events {
 		_, err := buf.WriteString(fmt.Sprintf("%s,%s\n", strconv.Quote(e.Date.String()), strconv.Quote(e.Title)))
 		if err != nil {
-			return nil, errs.WrapWithCause(err, nil)
+			return nil, errs.Wrap(err)
 		}
 	}
 	return buf.Bytes(), nil
