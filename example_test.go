@@ -2,6 +2,7 @@ package koyomi_test
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 
@@ -24,7 +25,10 @@ func ExampleKoyomi() {
 	if err != nil {
 		return
 	}
-	io.Copy(os.Stdout, bytes.NewReader(csv))
+	if _, err := io.Copy(os.Stdout, bytes.NewReader(csv)); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
 	//Output:
 	//"Date","Title"
 	//"2019-05-01","休日 (天皇の即位の日)"

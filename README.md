@@ -1,6 +1,7 @@
 # [koyomi] -- 日本のこよみ
 
-[![Build Status](https://travis-ci.org/spiegel-im-spiegel/koyomi.svg?branch=master)](https://travis-ci.org/spiegel-im-spiegel/koyomi)
+[![check vulns](https://github.com/spiegel-im-spiegel/koyomi/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/koyomi/actions)
+[![lint status](https://github.com/spiegel-im-spiegel/koyomi/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/koyomi/actions)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/koyomi/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/koyomi.svg)](https://github.com/spiegel-im-spiegel/koyomi/releases/latest)
 
