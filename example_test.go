@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/spiegel-im-spiegel/koyomi"
 )
 
 func ExampleKoyomi() {
 	start, _ := koyomi.DateFrom("2019-05-01")
-	end, _ := koyomi.DateFrom("2019-05-31")
+	end := koyomi.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
 	k, err := koyomi.NewSource(
 		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
 		koyomi.WithStartDate(start),

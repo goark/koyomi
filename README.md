@@ -23,7 +23,7 @@ const (
 
 ```go
 start, _ := koyomi.DateFrom("2019-05-01")
-end, _ := koyomi.DateFrom("2019-05-31")
+end := koyomi.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
 k, err := koyomi.NewSource(
     koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
     koyomi.WithStartDate(start),
@@ -50,6 +50,10 @@ io.Copy(os.Stdout, bytes.NewReader(csv))
 //"2019-05-06","立夏"
 //"2019-05-21","小満"
 ```
+
+## Modules Requirement Graph
+
+[![dependency.png](./dependency.png)](./dependency.png)
 
 ## Links
 

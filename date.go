@@ -8,9 +8,10 @@ import (
 	"github.com/spiegel-im-spiegel/errs"
 )
 
-const jstoffset = 9 * 60 * 60
-
-var jst = time.FixedZone("JST", jstoffset)
+var (
+	jstoffset = int64((9 * time.Hour).Seconds())
+	JST       = time.FixedZone("JST", int(jstoffset)) // Japan standard Time
+)
 
 //DateJp is wrapper class of time.Time
 type DateJp struct {
@@ -24,7 +25,7 @@ func NewDate(tm time.Time) DateJp {
 	}
 	ut := tm.Unix()
 	_, offset := tm.Zone()
-	return DateJp{time.Unix(((ut+int64(offset))/86400)*86400-jstoffset, 0).In(jst)}
+	return DateJp{time.Unix(((ut+int64(offset))/86400)*86400-jstoffset, 0).In(JST)}
 }
 
 var timeTemplate = []string{
