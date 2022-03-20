@@ -2,8 +2,8 @@ package koyomi
 
 import (
 	ics "github.com/PuloV/ics-golang"
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/koyomi/ecode"
+	"github.com/goark/errs"
+	"github.com/goark/koyomi/ecode"
 )
 
 //Source is information of data source for koyomi

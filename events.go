@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/koyomi/ecode"
+	"github.com/goark/errs"
+	"github.com/goark/koyomi/ecode"
 )
 
 //Event is koyomi event data

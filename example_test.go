@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/spiegel-im-spiegel/koyomi"
+	"github.com/goark/koyomi"
 )
 
 func ExampleKoyomi() {
