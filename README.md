@@ -1,9 +1,11 @@
 # [koyomi] -- 日本のこよみ
 
-[![check vulns](https://github.com/spiegel-im-spiegel/koyomi/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/koyomi/actions)
-[![lint status](https://github.com/spiegel-im-spiegel/koyomi/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/koyomi/actions)
-[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/koyomi/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/koyomi.svg)](https://github.com/spiegel-im-spiegel/koyomi/releases/latest)
+[![check vulns](https://github.com/goark/koyomi/workflows/vulns/badge.svg)](https://github.com/goark/koyomi/actions)
+[![lint status](https://github.com/goark/koyomi/workflows/lint/badge.svg)](https://github.com/goark/koyomi/actions)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/goark/koyomi/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/goark/koyomi.svg)](https://github.com/goark/koyomi/releases/latest)
+
+**Migrated repository to [github.com/goark/koyomi][koyomi]**
 
 「[国立天文台 天文情報センター 暦計算室](http://eco.mtk.nao.ac.jp/koyomi/)」より日本の暦情報を取得する [Go 言語]用パッケージです。 Google Calendar を経由して取得しています。
 
@@ -62,4 +64,4 @@ io.Copy(os.Stdout, bytes.NewReader(csv))
 - [日本の暦情報を取得するパッケージを作ってみた — リリース情報 | text.Baldanders.info](https://text.baldanders.info/release/2020/05/koyomi/)
 
 [Go 言語]: https://golang.org/ "The Go Programming Language"
-[koyomi]: https://github.com/spiegel-im-spiegel/koyomi "spiegel-im-spiegel/koyomi: 日本のこよみ"
+[koyomi]: https://github.com/goark/koyomi "goark/koyomi: 日本のこよみ"
