@@ -1,4 +1,4 @@
-package era
+package koyomi
 
 import (
 	"testing"
@@ -10,7 +10,7 @@ func TestNameToString(t *testing.T) {
 		n eraName
 		s string
 	}{
-		{n: Unknown, s: ""},
+		{n: EraUnknown, s: ""},
 		{n: Meiji, s: "明治"},
 		{n: Taisho, s: "大正"},
 		{n: Showa, s: "昭和"},
@@ -30,8 +30,8 @@ func TestStringToName(t *testing.T) {
 		n eraName
 		s string
 	}{
-		{n: Unknown, s: ""},
-		{n: Unknown, s: "元号"},
+		{n: EraUnknown, s: ""},
+		{n: EraUnknown, s: "元号"},
 		{n: Meiji, s: "明治"},
 		{n: Taisho, s: "大正"},
 		{n: Showa, s: "昭和"},
@@ -39,7 +39,7 @@ func TestStringToName(t *testing.T) {
 		{n: Reiwa, s: "令和"},
 	}
 	for _, tc := range testCases {
-		n := Name(tc.s)
+		n := EraName(tc.s)
 		if tc.n != n {
 			t.Errorf("GetName(%v) = \"%v\", want \"%v\".", tc.s, n, tc.n)
 		}
@@ -56,7 +56,7 @@ func TestTimeToEra(t *testing.T) {
 		eraStr  string
 		yearStr string
 	}{
-		{year: 1872, month: time.December, day: 31, n: Unknown, yearEra: 0, eraStr: "", yearStr: ""},
+		{year: 1872, month: time.December, day: 31, n: EraUnknown, yearEra: 0, eraStr: "", yearStr: ""},
 		{year: 1873, month: time.January, day: 1, n: Meiji, yearEra: 6, eraStr: "明治", yearStr: "6年"},
 		{year: 1912, month: time.July, day: 29, n: Meiji, yearEra: 45, eraStr: "明治", yearStr: "45年"},
 		{year: 1912, month: time.July, day: 30, n: Taisho, yearEra: 1, eraStr: "大正", yearStr: "元年"},
@@ -70,11 +70,11 @@ func TestTimeToEra(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		tm := time.Date(tc.year, tc.month, tc.day, 0, 0, 0, 0, time.UTC)
-		n, y := New(tm).YearEra()
+		n, y := NewDate(tm).YearEra()
 		if tc.n != n || tc.yearEra != y {
 			t.Errorf("[%v].Era() = \"%v %d\", want \"%v %d\".", tm, n, y, tc.n, tc.yearEra)
 		}
-		ns, ys := New(tm).YearEraString()
+		ns, ys := NewDate(tm).YearEraString()
 		if tc.eraStr != ns || tc.yearStr != ys {
 			t.Errorf("[%v].Era() = \"%v %v\", want \"%v %v\".", tm, ns, ys, tc.eraStr, tc.yearStr)
 		}
@@ -89,12 +89,12 @@ func TestEraToDate(t *testing.T) {
 		day     int
 		timeStr string
 	}{
-		{n: Unknown, year: 2019, month: time.May, day: 1, timeStr: "2019-05-01"},
+		{n: EraUnknown, year: 2019, month: time.May, day: 1, timeStr: "2019-05-01"},
 		{n: Heisei, year: 31, month: time.May, day: 1, timeStr: "2019-05-01"},
 		{n: Reiwa, year: 1, month: time.May, day: 1, timeStr: "2019-05-01"},
 	}
 	for _, tc := range testCases {
-		tm := Date(tc.n, tc.year, tc.month, tc.day, 0, 0, 0, 0, time.UTC)
+		tm := NewDateEra(tc.n, tc.year, tc.month, tc.day)
 		s := tm.Format("2006-01-02")
 		if tc.timeStr != s {
 			t.Errorf("Date() = \"%v\", want \"%v\".", s, tc.timeStr)

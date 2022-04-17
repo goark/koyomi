@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/goark/errs"
-	"github.com/goark/koyomi/ecode"
 )
 
 //Event is koyomi event data
@@ -63,14 +62,14 @@ func (k *Koyomi) append(e ...Event) {
 
 func (k *Koyomi) EncodeJSON() ([]byte, error) {
 	if k == nil || len(k.events) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData)
+		return nil, errs.Wrap(ErrNoData)
 	}
 	return json.Marshal(k.events)
 }
 
 func (k *Koyomi) EncodeCSV() ([]byte, error) {
 	if k == nil || len(k.events) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData)
+		return nil, errs.Wrap(ErrNoData)
 	}
 	buf := &bytes.Buffer{}
 	_, err := buf.WriteString(`"Date","Title"` + "\n")
@@ -86,7 +85,7 @@ func (k *Koyomi) EncodeCSV() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-/* Copyright 2020 Spiegel
+/* Copyright 2020-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

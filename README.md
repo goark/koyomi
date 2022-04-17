@@ -83,7 +83,7 @@ import (
     "strconv"
     "time"
 
-    "github.com/goark/koyomi/era"
+    "github.com/goark/koyomi"
 )
 
 func main() {
@@ -106,7 +106,7 @@ func main() {
         }
         tm = time.Date(args[0], time.Month(args[1]), args[2], 0, 0, 0, 0, time.Local)
     }
-    te := era.New(tm)
+    te := koyomi.NewDate(tm)
     n, y := te.YearEraString()
     if len(n) == 0 {
         fmt.Fprintln(os.Stderr, "正しい年月日を指定してください")
@@ -119,10 +119,10 @@ func main() {
 これを実行すると以下のような結果になります。
 
 ```
-$ go run era/sample1/sample1.go 2019 4 30
+$ go run sample/sample1.go 2019 4 30
 平成31年4月30日
 
-$ go run era/sample1/sample1.go 2019 5 1
+$ go run sample/sample1.go 2019 5 1
 令和元年5月1日
 ```
 
@@ -141,7 +141,7 @@ import (
     "strconv"
     "time"
 
-    "github.com/goark/koyomi/era"
+    "github.com/goark/koyomi"
 )
 
 func main() {
@@ -162,7 +162,7 @@ func main() {
         }
         args[i] = num
     }
-    te := era.Date(era.Name(name), args[0], time.Month(args[1]), args[2], 0, 0, 0, 0, time.Local)
+    te := koyomi.NewDateEra(koyomi.EraName(name), args[0], time.Month(args[1]), args[2], 0, 0, 0, 0, time.Local)
     fmt.Println(te.Format("西暦2006年1月2日"))
 }
 ```
@@ -170,10 +170,10 @@ func main() {
 これを実行すると以下のような結果になります。
 
 ```
-$ go run sample2/sample2.go 平成 31 4 30
+$ go run sample/sample2.go 平成 31 4 30
 西暦2019年4月30日
 
-$ go run sample2/sample2.go 令和 1 5 1
+$ go run sample/sample2.go 令和 1 5 1
 西暦2019年5月1日
 ```
 
@@ -189,8 +189,8 @@ import (
     "flag"
     "fmt"
     "os"
-    "time"
 
+    "github.com/goark/koyomi"
     "github.com/goark/koyomi/zodiac"
 )
 
@@ -202,7 +202,7 @@ func main() {
         return
     }
     for _, s := range args {
-        t, err := time.Parse("2006-01-02", s)
+        t, err := koyomi.DateFrom(s)
         if err != nil {
             fmt.Fprintln(os.Stderr, err)
             continue
@@ -218,7 +218,7 @@ func main() {
 これを実行すると以下のような結果になります。
 
 ```
-$ go run zodiac/sample/sample.go 2021-07-28
+$ go run sample/sample3.go 2021-07-28
 Year 2021 is 辛丑
 Day 2021-07-28 is 丁丑
 ```

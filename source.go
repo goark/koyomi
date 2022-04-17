@@ -3,7 +3,6 @@ package koyomi
 import (
 	ics "github.com/PuloV/ics-golang"
 	"github.com/goark/errs"
-	"github.com/goark/koyomi/ecode"
 )
 
 //Source is information of data source for koyomi
@@ -59,10 +58,10 @@ func WithTempDir(dir string) optFunc {
 //Get returns koyomi data from calendar dources
 func (s *Source) Get() (*Koyomi, error) {
 	if s == nil {
-		return nil, errs.Wrap(ecode.ErrNullPointer)
+		return nil, errs.Wrap(ErrNullPointer)
 	}
 	if len(s.cids) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData)
+		return nil, errs.Wrap(ErrNoData)
 	}
 	k := newKoyomi()
 	if len(s.tempDir) > 0 {
@@ -82,7 +81,7 @@ func (s *Source) Get() (*Koyomi, error) {
 func getFrom(cid CalendarID, start, end DateJp) ([]Event, error) {
 	url := cid.URL()
 	if len(url) == 0 {
-		return nil, errs.Wrap(ecode.ErrNoData, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
+		return nil, errs.Wrap(ErrNoData, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
 	}
 	parser := ics.New()
 	pch := parser.GetInputChan()
@@ -118,7 +117,7 @@ func boundaryIn(e Event, start, end DateJp) bool {
 	return true
 }
 
-/* Copyright 2020 Spiegel
+/* Copyright 2020-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
