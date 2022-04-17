@@ -73,9 +73,12 @@ func TestEqual(t *testing.T) {
 	if dt1.After(dt2) {
 		t.Error("DateJp.After() is true, want false.")
 	}
+	if !dt1.AddDay(1).Equal(dt2) {
+		t.Error("DateJp.Equal() is false, want true.")
+	}
 }
 
-/* Copyright 2020 Spiegel
+/* Copyright 2020-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

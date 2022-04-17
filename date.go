@@ -94,7 +94,17 @@ func (t DateJp) After(dt DateJp) bool {
 	return !t.Equal(dt) && t.Time.After(dt.Time)
 }
 
-/* Copyright 2020 Spiegel
+//AddDate method adds years/months/days and returns new Date instance.
+func (t DateJp) AddDate(years int, months int, days int) DateJp {
+	return NewDate(t.Time.AddDate(years, months, days))
+}
+
+//AddDay method adds n days and returns new Date instance.
+func (t DateJp) AddDay(days int) DateJp {
+	return t.AddDate(0, 0, days)
+}
+
+/* Copyright 2020-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
