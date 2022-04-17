@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/goark/koyomi"
 	"github.com/goark/koyomi/zodiac"
 )
 
@@ -63,18 +64,18 @@ func TestShi12(t *testing.T) {
 
 func TestZodiac(t *testing.T) {
 	testCases := []struct {
-		t       time.Time
+		t       koyomi.DateJp
 		kanYear zodiac.Kan10
 		shiYear zodiac.Shi12
 		kanDay  zodiac.Kan10
 		shiDay  zodiac.Shi12
 	}{
-		{t: time.Date(1983, time.January, 1, 0, 0, 0, 0, zodiac.JST), kanYear: zodiac.Mizunoto, shiYear: zodiac.Boar, kanDay: zodiac.Tsutinoto, shiDay: zodiac.Ox},
-		{t: time.Date(1984, time.January, 1, 0, 0, 0, 0, zodiac.JST), kanYear: zodiac.Kinoe, shiYear: zodiac.Rat, kanDay: zodiac.Kinoe, shiDay: zodiac.Horse},
-		{t: time.Date(1985, time.January, 1, 0, 0, 0, 0, zodiac.JST), kanYear: zodiac.Kinoto, shiYear: zodiac.Ox, kanDay: zodiac.Kanoe, shiDay: zodiac.Rat},
-		{t: time.Date(2000, time.January, 1, 0, 0, 0, 0, zodiac.JST), kanYear: zodiac.Kanoe, shiYear: zodiac.Dragon, kanDay: zodiac.Tsutinoe, shiDay: zodiac.Horse},
-		{t: time.Date(2001, time.January, 1, 0, 0, 0, 0, zodiac.JST), kanYear: zodiac.Kanoto, shiYear: zodiac.Snake, kanDay: zodiac.Kinoe, shiDay: zodiac.Rat},
-		{t: time.Date(2002, time.January, 1, 0, 0, 0, 0, zodiac.JST), kanYear: zodiac.Mizunoe, shiYear: zodiac.Horse, kanDay: zodiac.Tsutinoto, shiDay: zodiac.Snake},
+		{t: koyomi.NewDate(time.Date(1983, time.January, 1, 0, 0, 0, 0, koyomi.JST)), kanYear: zodiac.Mizunoto, shiYear: zodiac.Boar, kanDay: zodiac.Tsutinoto, shiDay: zodiac.Ox},
+		{t: koyomi.NewDate(time.Date(1984, time.January, 1, 0, 0, 0, 0, koyomi.JST)), kanYear: zodiac.Kinoe, shiYear: zodiac.Rat, kanDay: zodiac.Kinoe, shiDay: zodiac.Horse},
+		{t: koyomi.NewDate(time.Date(1985, time.January, 1, 0, 0, 0, 0, koyomi.JST)), kanYear: zodiac.Kinoto, shiYear: zodiac.Ox, kanDay: zodiac.Kanoe, shiDay: zodiac.Rat},
+		{t: koyomi.NewDate(time.Date(2000, time.January, 1, 0, 0, 0, 0, koyomi.JST)), kanYear: zodiac.Kanoe, shiYear: zodiac.Dragon, kanDay: zodiac.Tsutinoe, shiDay: zodiac.Horse},
+		{t: koyomi.NewDate(time.Date(2001, time.January, 1, 0, 0, 0, 0, koyomi.JST)), kanYear: zodiac.Kanoto, shiYear: zodiac.Snake, kanDay: zodiac.Kinoe, shiDay: zodiac.Rat},
+		{t: koyomi.NewDate(time.Date(2002, time.January, 1, 0, 0, 0, 0, koyomi.JST)), kanYear: zodiac.Mizunoe, shiYear: zodiac.Horse, kanDay: zodiac.Tsutinoto, shiDay: zodiac.Snake},
 	}
 
 	for _, tc := range testCases {
@@ -95,7 +96,7 @@ func TestZodiac(t *testing.T) {
 	}
 }
 
-/* Copyright 2021 Spiegel
+/* Copyright 2021-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

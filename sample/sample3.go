@@ -7,8 +7,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"time"
 
+	"github.com/goark/koyomi"
 	"github.com/goark/koyomi/zodiac"
 )
 
@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 	for _, s := range args {
-		t, err := time.Parse("2006-01-02", s)
+		t, err := koyomi.DateFrom(s)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			continue
@@ -32,7 +32,7 @@ func main() {
 	}
 }
 
-/* Copyright 2021 Spiegel
+/* Copyright 2021-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

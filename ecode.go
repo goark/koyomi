@@ -1,4 +1,4 @@
-package ecode
+package koyomi
 
 import "errors"
 
