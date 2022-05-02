@@ -36,7 +36,7 @@ func GetMJDN(dt time.Time) int64 {
 }
 
 func intRat(x int64) *big.Rat {
-	return (&big.Rat{}).SetInt64(x)
+	return fracInt(x, 1)
 }
 
 func floatRat(x float64) *big.Rat {
