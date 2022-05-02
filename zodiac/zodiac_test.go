@@ -81,17 +81,17 @@ func TestZodiac(t *testing.T) {
 	for _, tc := range testCases {
 		kanYear, shiYear := zodiac.ZodiacYearNumber(tc.t.Year())
 		if kanYear != tc.kanYear {
-			t.Errorf("result of ZodiacYearNumber(\"%v\") is \"%v\", want %v", tc.t, kanYear, tc.kanYear)
+			t.Errorf("result of ZodiacYearNumber(\"%v\") is \"%v\" (kan), want %v", tc.t, kanYear, tc.kanYear)
 		}
 		if shiYear != tc.shiYear {
-			t.Errorf("result of ZodiacYearNumber(\"%v\") is \"%v\", want %v", tc.t, shiYear, tc.shiYear)
+			t.Errorf("result of ZodiacYearNumber(\"%v\") is \"%v\" (shi), want %v", tc.t, shiYear, tc.shiYear)
 		}
 		kanDay, shiDay := zodiac.ZodiacDayNumber(tc.t)
 		if kanDay != tc.kanDay {
-			t.Errorf("result of ZodiacDayNumber(\"%v\") is \"%v\", want %v", tc.t, kanDay, tc.kanDay)
+			t.Errorf("result of ZodiacDayNumber(\"%v\") is \"%v\" (kan), want %v", tc.t, kanDay, tc.kanDay)
 		}
 		if shiYear != tc.shiYear {
-			t.Errorf("result of ZodiacDayNumber(\"%v\") is \"%v\", want %v", tc.t, shiDay, tc.shiDay)
+			t.Errorf("result of ZodiacDayNumber(\"%v\") is \"%v\" (shi), want %v", tc.t, shiDay, tc.shiDay)
 		}
 	}
 }
