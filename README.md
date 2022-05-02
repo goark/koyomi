@@ -231,6 +231,7 @@ Day 2021-07-28 is 丁丑
 
 - [国立天文台 天文情報センター 暦計算室](https://eco.mtk.nao.ac.jp/koyomi/)
     - [今月のこよみ powered by Google Calendar - 国立天文台暦計算室](https://eco.mtk.nao.ac.jp/koyomi/cande/calendar.html)
+    - [ユリウス日について - 国立天文台暦計算室](https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2023_1.html)
 - [日本の暦情報を取得するパッケージを作ってみた — リリース情報 | text.Baldanders.info](https://text.baldanders.info/release/2020/05/koyomi/)
 
 [Go 言語]: https://golang.org/ "The Go Programming Language"
