@@ -16,7 +16,7 @@ func GetJD(dt time.Time) *big.Rat {
 	jdn = addRat(jdn, floorRat(mulRat(addInt(mulInt(k, 12), m-2), fracInt(367, 12))))
 	jdn = subRat(jdn, floorRat(mulRat(floorRat(quoInt(addInt(subRat(y, k), 4900), 100)), fracInt(3, 4))))
 	jdn = addInt(jdn, d-32075)
-	jdn = addRat(jdn, subRat(quoInt(intRat(int64(dt.Second()+dt.Minute()*60+dt.Hour()*3600)), 60*60*24), floatRat(0.5)))
+	jdn = addRat(jdn, subRat(quoRat(addRat(intRat(int64(dt.Second()+dt.Minute()*60+dt.Hour()*3600)), fracInt(int64(dt.Nanosecond()), 999999999)), floatRat((24*time.Hour).Seconds())), floatRat(0.5)))
 	return jdn
 }
 

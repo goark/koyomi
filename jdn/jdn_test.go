@@ -4,11 +4,10 @@ import (
 	"math/big"
 	"testing"
 	"time"
-
-	"github.com/goark/koyomi"
 )
 
 func TestGetJDN(t *testing.T) {
+	jst := time.FixedZone("JST", int((9 * time.Hour).Seconds())) // Japan standard Time
 	testCases := []struct {
 		inp   time.Time
 		outp1 *big.Rat
@@ -17,7 +16,7 @@ func TestGetJDN(t *testing.T) {
 		outp4 int64
 	}{
 		{inp: time.Date(2015, time.January, 1, 0, 0, 0, 0, time.UTC), outp1: floatRat(2457023.5), outp2: 2457023, outp3: floatRat(57023.0), outp4: 57023},
-		{inp: time.Date(2022, time.January, 1, 0, 0, 0, 0, koyomi.JST), outp1: floatRat(2459580.125), outp2: 2459580, outp3: floatRat(59579.625), outp4: 59579},
+		{inp: time.Date(2022, time.January, 1, 0, 0, 0, 0, jst), outp1: floatRat(2459580.125), outp2: 2459580, outp3: floatRat(59579.625), outp4: 59579},
 	}
 	for _, tc := range testCases {
 		jd := GetJD(tc.inp)

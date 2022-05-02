@@ -223,6 +223,50 @@ Year 2021 is 辛丑
 Day 2021-07-28 is 丁丑
 ```
 
+### ユリウス日
+
+```go
+//go:build run
+// +build run
+
+package main
+
+import (
+    "flag"
+    "fmt"
+    "os"
+
+    "github.com/goark/koyomi"
+    "github.com/goark/koyomi/jdn"
+)
+
+func main() {
+    flag.Parse()
+    args := flag.Args()
+    if len(args) < 1 {
+        fmt.Fprintln(os.Stderr, os.ErrInvalid)
+        return
+    }
+    for _, s := range args {
+        t, err := koyomi.DateFrom(s)
+        if err != nil {
+            fmt.Fprintln(os.Stderr, err)
+            continue
+        }
+        j := jdn.GetJDN(t.Time)
+        fmt.Printf("Julian Day Number of %v is %v\n", t.Format("2006-01-02"), j)
+    }
+}
+```
+
+これを実行すると以下のような結果になります。
+
+```
+$ go run sample/sample4.go 2022-01-01
+$ go run sample/sample4.go 2022-01-01
+Julian Day Number of 2022-01-01 is 2459580
+```
+
 ## Modules Requirement Graph
 
 [![dependency.png](./dependency.png)](./dependency.png)
