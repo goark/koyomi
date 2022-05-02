@@ -263,7 +263,6 @@ func main() {
 
 ```
 $ go run sample/sample4.go 2022-01-01
-$ go run sample/sample4.go 2022-01-01
 Julian Day Number of 2022-01-01 is 2459580
 ```
 

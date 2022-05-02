@@ -5,19 +5,19 @@ import (
 	"time"
 )
 
-// GetJD returns Julian Day from time.Time.
+// GetJD returns Julian Date from time.Time.
 func GetJD(dt time.Time) *big.Rat {
 	dt = dt.In(time.UTC)
 	y := intRat(int64(dt.Year()))
 	m := int64(dt.Month())
 	d := int64(dt.Day())
 	k := floorRat(quoInt(intRat(14-m), 12))
-	jdn := floorRat(mulRat(addInt(subRat(y, k), 4800), fracInt(1461, 4)))
-	jdn = addRat(jdn, floorRat(mulRat(addInt(mulInt(k, 12), m-2), fracInt(367, 12))))
-	jdn = subRat(jdn, floorRat(mulRat(floorRat(quoInt(addInt(subRat(y, k), 4900), 100)), fracInt(3, 4))))
-	jdn = addInt(jdn, d-32075)
-	jdn = addRat(jdn, subRat(quoRat(addRat(intRat(int64(dt.Second()+dt.Minute()*60+dt.Hour()*3600)), fracInt(int64(dt.Nanosecond()), 999999999)), floatRat((24*time.Hour).Seconds())), floatRat(0.5)))
-	return jdn
+	j := floorRat(mulRat(addInt(subRat(y, k), 4800), fracInt(1461, 4)))
+	j = addRat(j, floorRat(mulRat(addInt(mulInt(k, 12), m-2), fracInt(367, 12))))
+	j = subRat(j, floorRat(mulRat(floorRat(quoInt(addInt(subRat(y, k), 4900), 100)), fracInt(3, 4))))
+	j = addInt(j, d-32075)
+	j = addRat(j, subRat(quoRat(addRat(intRat(int64(dt.Second()+dt.Minute()*60+dt.Hour()*3600)), fracInt(int64(dt.Nanosecond()), 999999999)), floatRat((24*time.Hour).Seconds())), floatRat(0.5)))
+	return j
 }
 
 // GetJDN returns Julian Day Number from time.Time.
@@ -25,7 +25,7 @@ func GetJDN(dt time.Time) int64 {
 	return floorRat(GetJD(dt)).Num().Int64()
 }
 
-// GetMJD returns Modified Julian Day from time.Time.
+// GetMJD returns Modified Julian Date from time.Time.
 func GetMJD(dt time.Time) *big.Rat {
 	return subRat(GetJD(dt), floatRat(2400000.5))
 }
@@ -33,6 +33,21 @@ func GetMJD(dt time.Time) *big.Rat {
 // GetMJDN returns Modified Julian Day Number from time.Time.
 func GetMJDN(dt time.Time) int64 {
 	return floorRat(GetMJD(dt)).Num().Int64()
+}
+
+// FromJDN returns time.Time instance form Julian Day Number.
+func FromJD(jn int64) time.Time {
+	l := intRat(jn + 68569)
+	n := floorRat(mulInt(quoInt(l, 146097), 4))
+	l = subRat(l, floorRat(quoInt(addInt(mulInt(n, 146097), 3), 4)))
+	i := floorRat(quoInt(mulInt(addInt(l, 1), 4000), 1461001))
+	l = addInt(subRat(l, floorRat(quoInt(mulInt(i, 1461), 4))), 31)
+	j := floorRat(quoInt(mulInt(l, 80), 2447))
+	day := subRat(l, floorRat(quoInt(mulInt(j, 2447), 80)))
+	l = floorRat(quoInt(j, 11))
+	month := subRat(addInt(j, 2), mulInt(l, 12))
+	year := addRat(mulInt(addInt(n, -49), 100), addRat(i, l))
+	return time.Date(int(year.Num().Int64()), time.Month(int(month.Num().Int64())), int(day.Num().Int64()), 12, 0, 0, 0, time.UTC)
 }
 
 func intRat(x int64) *big.Rat {
