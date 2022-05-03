@@ -262,8 +262,8 @@ func main() {
 これを実行すると以下のような結果になります。
 
 ```
-$ go run sample/sample4.go 2022-01-01
-Julian Day Number of 2022-01-01 is 2459580
+$ go run sample/sample4.go 2023-02-25
+Julian Day Number of 2023-02-25 is 2460000
 ```
 
 ## Modules Requirement Graph

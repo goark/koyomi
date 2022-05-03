@@ -18,19 +18,25 @@ func TestGetJDN(t *testing.T) {
 	}{
 		{inp: time.Date(2015, time.January, 1, 0, 0, 0, 0, time.UTC), outp1: floatRat(2457023.5), outp2: 2457023, outpDt: time.Date(2015, time.January, 0, 12, 0, 0, 0, time.UTC), outp3: floatRat(57023.0), outp4: 57023},
 		{inp: time.Date(2022, time.January, 1, 0, 0, 0, 0, jst), outp1: floatRat(2459580.125), outp2: 2459580, outpDt: time.Date(2022, time.January, 0, 12, 0, 0, 0, time.UTC), outp3: floatRat(59579.625), outp4: 59579},
+		{inp: time.Date(2023, time.February, 24, 12, 0, 0, 0, time.UTC), outp1: floatRat(2460000.0), outp2: 2460000, outpDt: time.Date(2023, time.February, 24, 12, 0, 0, 0, time.UTC), outp3: floatRat(59999.5), outp4: 59999},
 	}
 	for _, tc := range testCases {
 		jd := GetJD(tc.inp)
 		if jd.Cmp(tc.outp1) != 0 {
 			t.Errorf("GetJD(%v) is %v, want %v.", tc.inp, jd.FloatString(5), tc.outp1.FloatString(5))
 		}
+		fjd, _ := jd.Float64()
+		dt := FromJD(fjd)
+		if !dt.Equal(tc.inp) {
+			t.Errorf("FromJD(%v) is %v, want %v.", fjd, dt, tc.inp)
+		}
 		jn := GetJDN(tc.inp)
 		if jn != tc.outp2 {
 			t.Errorf("GetJDN(%v) is %v, want %v.", tc.inp, jn, tc.outp2)
 		}
-		dt := FromJD(jn)
+		dt = FromJDN(jn)
 		if !dt.Equal(tc.outpDt) {
-			t.Errorf("FromJD(%v) is %v, want %v.", jn, dt, tc.outpDt)
+			t.Errorf("FromJDN(%v) is %v, want %v.", jn, dt, tc.outpDt)
 		}
 		mjd := GetMJD(tc.inp)
 		if mjd.Cmp(tc.outp3) != 0 {
@@ -39,6 +45,11 @@ func TestGetJDN(t *testing.T) {
 		mjdn := GetMJDN(tc.inp)
 		if mjdn != tc.outp4 {
 			t.Errorf("GetMJDN(%v) is %v, want %v.", tc.inp, mjdn, tc.outp4)
+		}
+		fmjd, _ := mjd.Float64()
+		dt = FromMJD(fmjd)
+		if !dt.Equal(tc.inp) {
+			t.Errorf("FromMJD(%v) is %v, want %v.", fjd, dt, tc.inp)
 		}
 	}
 }
