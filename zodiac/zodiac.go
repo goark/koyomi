@@ -1,9 +1,8 @@
 package zodiac
 
 import (
-	"time"
-
 	"github.com/goark/koyomi"
+	"github.com/goark/koyomi/jdn"
 )
 
 type Kan10 uint
@@ -53,13 +52,12 @@ func (s Shi12) String() string {
 }
 
 var (
-	baseDay  = time.Date(2001, time.January, 1, 0, 0, 0, 0, koyomi.JST) // 2001-01-01 is 甲子
-	baseYear = 1984                                                     // Year 1984 is 甲子
+	baseYear = 1984 // Year 1984 is 甲子
 )
 
-// ZodiacDayNumber function returns japanese zodiac day number from 2001-01-01.
+// ZodiacDayNumber function returns japanese zodiac day number.
 func ZodiacDayNumber(t koyomi.DateJp) (Kan10, Shi12) {
-	n := int64(t.Sub(baseDay).Hours()) / 24
+	n := jdn.GetJDN(t.Time) + 50
 	k := n % int64(KanMax)
 	if k < 0 {
 		k += int64(KanMax)
