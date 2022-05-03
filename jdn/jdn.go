@@ -36,8 +36,8 @@ func GetMJDN(dt time.Time) int64 {
 }
 
 // FromJDN returns time.Time instance form Julian Day Number.
-func FromJD(jn int64) time.Time {
-	l := intRat(jn + 68569)
+func FromJDN(jdnum int64) time.Time {
+	l := intRat(jdnum + 68569)
 	n := floorRat(mulInt(quoInt(l, 146097), 4))
 	l = subRat(l, floorRat(quoInt(addInt(mulInt(n, 146097), 3), 4)))
 	i := floorRat(quoInt(mulInt(addInt(l, 1), 4000), 1461001))
@@ -48,6 +48,18 @@ func FromJD(jn int64) time.Time {
 	month := subRat(addInt(j, 2), mulInt(l, 12))
 	year := addRat(mulInt(addInt(n, -49), 100), addRat(i, l))
 	return time.Date(int(year.Num().Int64()), time.Month(int(month.Num().Int64())), int(day.Num().Int64()), 12, 0, 0, 0, time.UTC)
+}
+
+// FromJD returns time.Time instance form Julian Date.
+func FromJD(jd float64) time.Time {
+	jdnum := int64(jd)
+	dt := FromJDN(jdnum)
+	return dt.Add(time.Duration((jd - float64(jdnum)) * float64(24*time.Hour)))
+}
+
+// FromJD returns time.Time instance form Julian Date.
+func FromMJD(mjd float64) time.Time {
+	return FromJD(mjd + 2400000.5)
 }
 
 func intRat(x int64) *big.Rat {
