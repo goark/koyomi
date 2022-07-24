@@ -52,9 +52,10 @@ func FromJDN(jdnum int64) time.Time {
 
 // FromJD returns time.Time instance form Julian Date.
 func FromJD(jd float64) time.Time {
-	jdnum := int64(jd)
-	dt := FromJDN(jdnum)
-	return dt.Add(time.Duration((jd - float64(jdnum)) * float64(24*time.Hour)))
+	jdRat := floatRat(jd)
+	jdnum := floorRat(jdRat)
+	dt := FromJDN(jdnum.Num().Int64())
+	return dt.Add(time.Duration(floorRat(mulRat(subRat(jdRat, jdnum), intRat(int64(24*time.Hour)))).Num().Int64()))
 }
 
 // FromJD returns time.Time instance form Julian Date.

@@ -36,7 +36,6 @@ func FromString(dur string) (*Duration, error) {
 		match []string
 		re    *regexp.Regexp
 	)
-
 	if week.MatchString(dur) {
 		match = week.FindStringSubmatch(dur)
 		re = week
@@ -44,17 +43,15 @@ func FromString(dur string) (*Duration, error) {
 		match = full.FindStringSubmatch(dur)
 		re = full
 	} else {
-		return nil, ErrBadFormat
+		return nil, errs.Wrap(ErrBadFormat, errs.WithContext("dur", dur))
 	}
 
 	d := &Duration{}
-
 	for i, name := range re.SubexpNames() {
 		part := match[i]
 		if i == 0 || name == "" || part == "" {
 			continue
 		}
-
 		val, err := strconv.Atoi(part)
 		if err != nil {
 			return nil, err
@@ -78,7 +75,6 @@ func FromString(dur string) (*Duration, error) {
 			return nil, errs.Wrap(ErrUnknownField, errs.WithContext("field", name))
 		}
 	}
-
 	return d, nil
 }
 
@@ -89,12 +85,10 @@ func FromString(dur string) (*Duration, error) {
 // other units.
 func (d *Duration) String() string {
 	var s bytes.Buffer
-
 	err := tmpl.Execute(&s, d)
 	if err != nil {
 		panic(err)
 	}
-
 	return s.String()
 }
 
@@ -107,14 +101,12 @@ func (d *Duration) ToDuration() time.Duration {
 	year := day * 365
 
 	tot := time.Duration(0)
-
 	tot += year * time.Duration(d.Years)
 	tot += day * 7 * time.Duration(d.Weeks)
 	tot += day * time.Duration(d.Days)
 	tot += time.Hour * time.Duration(d.Hours)
 	tot += time.Minute * time.Duration(d.Minutes)
 	tot += time.Second * time.Duration(d.Seconds)
-
 	return tot
 }
 
