@@ -10,26 +10,36 @@ import (
 
 func TestKan10(t *testing.T) {
 	testCases := []struct {
-		kan  zodiac.Kan10
-		name string
+		kan   zodiac.Kan10
+		name  string
+		dir   int
+		dirJp string
 	}{
-		{kan: zodiac.Kinoe, name: "甲"},
-		{kan: zodiac.Kinoto, name: "乙"},
-		{kan: zodiac.Hinoe, name: "丙"},
-		{kan: zodiac.Hinoto, name: "丁"},
-		{kan: zodiac.Tsutinoe, name: "戊"},
-		{kan: zodiac.Tsutinoto, name: "己"},
-		{kan: zodiac.Kanoe, name: "庚"},
-		{kan: zodiac.Kanoto, name: "辛"},
-		{kan: zodiac.Mizunoe, name: "壬"},
-		{kan: zodiac.Mizunoto, name: "癸"},
-		{kan: zodiac.Kan10(10), name: "甲"},
+		{kan: zodiac.Kinoe, name: "甲", dir: 75, dirJp: "東北東微東"},
+		{kan: zodiac.Kinoto, name: "乙", dir: 255, dirJp: "西南西微西"},
+		{kan: zodiac.Hinoe, name: "丙", dir: 165, dirJp: "南南東微南"},
+		{kan: zodiac.Hinoto, name: "丁", dir: 345, dirJp: "北北西微北"},
+		{kan: zodiac.Tsutinoe, name: "戊", dir: 165, dirJp: "南南東微南"},
+		{kan: zodiac.Tsutinoto, name: "己", dir: 75, dirJp: "東北東微東"},
+		{kan: zodiac.Kanoe, name: "庚", dir: 255, dirJp: "西南西微西"},
+		{kan: zodiac.Kanoto, name: "辛", dir: 165, dirJp: "南南東微南"},
+		{kan: zodiac.Mizunoe, name: "壬", dir: 345, dirJp: "北北西微北"},
+		{kan: zodiac.Mizunoto, name: "癸", dir: 165, dirJp: "南南東微南"},
+		{kan: zodiac.Kan10(10), name: "甲", dir: 75, dirJp: "東北東微東"},
 	}
 
 	for _, tc := range testCases {
 		str := tc.kan.String()
 		if str != tc.name {
 			t.Errorf("zodiac.Kan10(%v) is \"%v\", want %v", uint(tc.kan), str, tc.name)
+		}
+		dir := tc.kan.Direction()
+		if dir != tc.dir {
+			t.Errorf("zodiac.Kan10(%v) is \"%v\", want %v", uint(tc.kan), dir, tc.dir)
+		}
+		dirJp := tc.kan.DirectionJp()
+		if dirJp != tc.dirJp {
+			t.Errorf("zodiac.Kan10(%v) is \"%v\", want %v", uint(tc.kan), dirJp, tc.dirJp)
 		}
 	}
 }
@@ -96,7 +106,7 @@ func TestZodiac(t *testing.T) {
 	}
 }
 
-/* Copyright 2021-2022 Spiegel
+/* Copyright 2021-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
