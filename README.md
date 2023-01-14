@@ -208,7 +208,7 @@ func main() {
             continue
         }
         kan, shi := zodiac.ZodiacYearNumber(t.Year())
-        fmt.Printf("Year %v is %v%v\n", t.Year(), kan, shi)
+        fmt.Printf("Year %v is %v%v (Eho: %v)\n", t.Year(), kan, shi, kan.DirectionJp())
         kan, shi = zodiac.ZodiacDayNumber(t)
         fmt.Printf("Day %v is %v%v\n", t.Format("2006-01-02"), kan, shi)
     }
@@ -219,7 +219,7 @@ func main() {
 
 ```
 $ go run sample/sample3.go 2021-07-28
-Year 2021 is 辛丑
+Year 2021 is 辛丑 (Eho: 南南東微南)
 Day 2021-07-28 is 丁丑
 ```
 

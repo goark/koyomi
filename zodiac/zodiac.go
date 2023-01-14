@@ -21,10 +21,24 @@ const (
 	KanMax
 )
 
-var kanNames = [KanMax]string{"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"}
+var (
+	kanNames       = [KanMax]string{"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"}
+	kanDirection   = [KanMax]int{75, 255, 165, 345, 165, 75, 255, 165, 345, 165}
+	kanDirectionJp = [KanMax]string{"東北東微東", "西南西微西", "南南東微南", "北北西微北", "南南東微南", "東北東微東", "西南西微西", "南南東微南", "北北西微北", "南南東微南"}
+)
 
 func (k Kan10) String() string {
 	return kanNames[k%KanMax]
+}
+
+// Direction mehtod reterns Eho (favourable direction).
+func (k Kan10) Direction() int {
+	return kanDirection[k%KanMax]
+}
+
+// DirectionJp mehtod reterns japanese Eho (favourable direction) name.
+func (k Kan10) DirectionJp() string {
+	return kanDirectionJp[k%KanMax]
 }
 
 type Shi12 uint
@@ -83,7 +97,7 @@ func ZodiacYearNumber(y int) (Kan10, Shi12) {
 	return Kan10(k), Shi12(s)
 }
 
-/* Copyright 2021-2022 Spiegel
+/* Copyright 2021-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

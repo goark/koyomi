@@ -26,13 +26,13 @@ func main() {
 			continue
 		}
 		kan, shi := zodiac.ZodiacYearNumber(t.Year())
-		fmt.Printf("Year %v is %v%v\n", t.Year(), kan, shi)
+		fmt.Printf("Year %v is %v%v (Eho: %v)\n", t.Year(), kan, shi, kan.DirectionJp())
 		kan, shi = zodiac.ZodiacDayNumber(t)
 		fmt.Printf("Day %v is %v%v\n", t.Format("2006-01-02"), kan, shi)
 	}
 }
 
-/* Copyright 2021-2022 Spiegel
+/* Copyright 2021-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
