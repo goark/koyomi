@@ -10,11 +10,12 @@ import (
 	"time"
 
 	"github.com/goark/koyomi"
+	"github.com/goark/koyomi/value"
 )
 
 func main() {
-	start, _ := koyomi.DateFrom("2019-05-01")
-	end := koyomi.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
+	start, _ := value.DateFrom("2019-05-01")
+	end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, value.JST))
 	k, err := koyomi.NewSource(
 		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
 		koyomi.WithStartDate(start),
@@ -31,7 +32,7 @@ func main() {
 	io.Copy(os.Stdout, bytes.NewReader(csv))
 }
 
-/* Copyright 2022 Spiegel
+/* Copyright 2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

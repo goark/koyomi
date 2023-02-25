@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/goark/koyomi"
 	"github.com/goark/koyomi/jdn"
+	"github.com/goark/koyomi/value"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 	for _, s := range args {
-		t, err := koyomi.DateFrom(s)
+		t, err := value.DateFrom(s)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			continue

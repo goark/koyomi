@@ -2,14 +2,15 @@ package koyomi
 
 import (
 	"github.com/goark/errs"
+	"github.com/goark/koyomi/value"
 	ics "github.com/spiegel-im-spiegel/ics-golang"
 )
 
 // Source is information of data source for koyomi
 type Source struct {
 	cids    []CalendarID
-	start   DateJp
-	end     DateJp
+	start   value.DateJp
+	end     value.DateJp
 	tempDir string //temporary directory for github.com/spiegel-im-spiegel/ics-golang package
 }
 
@@ -35,14 +36,14 @@ func WithCalendarID(cid ...CalendarID) optFunc {
 }
 
 // WithStartDate returns function for setting Reader
-func WithStartDate(start DateJp) optFunc {
+func WithStartDate(start value.DateJp) optFunc {
 	return func(s *Source) {
 		s.start = start
 	}
 }
 
 // WithEndDate returns function for setting Reader
-func WithEndDate(end DateJp) optFunc {
+func WithEndDate(end value.DateJp) optFunc {
 	return func(s *Source) {
 		s.end = end
 	}
@@ -78,7 +79,7 @@ func (s *Source) Get() (*Koyomi, error) {
 	return k, nil
 }
 
-func getFrom(cid CalendarID, start, end DateJp) ([]Event, error) {
+func getFrom(cid CalendarID, start, end value.DateJp) ([]Event, error) {
 	url := cid.URL()
 	if len(url) == 0 {
 		return nil, errs.Wrap(ErrNoData, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
@@ -95,7 +96,7 @@ func getFrom(cid CalendarID, start, end DateJp) ([]Event, error) {
 	kevts := []Event{}
 	for _, calendar := range calendars {
 		for _, evt := range calendar.GetEvents() {
-			e := Event{Date: NewDate(evt.GetStart()), Title: evt.GetSummary()}
+			e := Event{Date: value.NewDate(evt.GetStart()), Title: evt.GetSummary()}
 			if boundaryIn(e, start, end) {
 				kevts = append(kevts, e)
 			}
@@ -104,7 +105,7 @@ func getFrom(cid CalendarID, start, end DateJp) ([]Event, error) {
 	return kevts, nil
 }
 
-func boundaryIn(e Event, start, end DateJp) bool {
+func boundaryIn(e Event, start, end value.DateJp) bool {
 	if e.Date.IsZero() {
 		return false
 	}
@@ -117,7 +118,7 @@ func boundaryIn(e Event, start, end DateJp) bool {
 	return true
 }
 
-/* Copyright 2020-2022 Spiegel
+/* Copyright 2020-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

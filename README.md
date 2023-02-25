@@ -24,8 +24,8 @@ const (
 ## 簡単な使い方
 
 ```go
-start, _ := koyomi.DateFrom("2019-05-01")
-end := koyomi.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
+start, _ := value.DateFrom("2019-05-01")
+end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
 k, err := koyomi.NewSource(
     koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
     koyomi.WithStartDate(start),
@@ -83,7 +83,7 @@ import (
     "strconv"
     "time"
 
-    "github.com/goark/koyomi"
+    "github.com/goark/koyomi/value"
 )
 
 func main() {
@@ -106,7 +106,7 @@ func main() {
         }
         tm = time.Date(args[0], time.Month(args[1]), args[2], 0, 0, 0, 0, time.Local)
     }
-    te := koyomi.NewDate(tm)
+    te := value.NewDate(tm)
     n, y := te.YearEraString()
     if len(n) == 0 {
         fmt.Fprintln(os.Stderr, "正しい年月日を指定してください")
@@ -141,7 +141,7 @@ import (
     "strconv"
     "time"
 
-    "github.com/goark/koyomi"
+    "github.com/goark/koyomi/value"
 )
 
 func main() {
@@ -162,7 +162,7 @@ func main() {
         }
         args[i] = num
     }
-    te := koyomi.NewDateEra(koyomi.EraName(name), args[0], time.Month(args[1]), args[2], 0, 0, 0, 0, time.Local)
+    te := value.NewDateEra(value.EraName(name), args[0], time.Month(args[1]), args[2])
     fmt.Println(te.Format("西暦2006年1月2日"))
 }
 ```
@@ -190,7 +190,7 @@ import (
     "fmt"
     "os"
 
-    "github.com/goark/koyomi"
+    "github.com/goark/koyomi/value"
     "github.com/goark/koyomi/zodiac"
 )
 
@@ -202,7 +202,7 @@ func main() {
         return
     }
     for _, s := range args {
-        t, err := koyomi.DateFrom(s)
+        t, err := value.DateFrom(s)
         if err != nil {
             fmt.Fprintln(os.Stderr, err)
             continue
@@ -236,8 +236,8 @@ import (
     "fmt"
     "os"
 
-    "github.com/goark/koyomi"
     "github.com/goark/koyomi/jdn"
+    "github.com/goark/koyomi/value"
 )
 
 func main() {
@@ -248,7 +248,7 @@ func main() {
         return
     }
     for _, s := range args {
-        t, err := koyomi.DateFrom(s)
+        t, err := value.DateFrom(s)
         if err != nil {
             fmt.Fprintln(os.Stderr, err)
             continue

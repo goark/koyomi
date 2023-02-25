@@ -1,8 +1,8 @@
 package zodiac
 
 import (
-	"github.com/goark/koyomi"
 	"github.com/goark/koyomi/jdn"
+	"github.com/goark/koyomi/value"
 )
 
 type Kan10 uint
@@ -70,7 +70,7 @@ var (
 )
 
 // ZodiacDayNumber function returns japanese zodiac day number.
-func ZodiacDayNumber(t koyomi.DateJp) (Kan10, Shi12) {
+func ZodiacDayNumber(t value.DateJp) (Kan10, Shi12) {
 	n := jdn.GetJDN(t.Time) + 50
 	k := n % int64(KanMax)
 	if k < 0 {

@@ -1,4 +1,4 @@
-package koyomi
+package value
 
 import (
 	"strconv"
@@ -13,12 +13,12 @@ var (
 	JST       = time.FixedZone("JST", int(jstoffset)) // Japan standard Time
 )
 
-//DateJp is wrapper class of time.Time
+// DateJp is wrapper class of time.Time
 type DateJp struct {
 	time.Time
 }
 
-//NewDate returns DateJp instance
+// NewDate returns DateJp instance
 func NewDate(tm time.Time) DateJp {
 	if tm.IsZero() {
 		return DateJp{tm}
@@ -34,7 +34,7 @@ var timeTemplate = []string{
 	time.RFC3339,
 }
 
-//DateFrom returns DateJp instance from date string
+// DateFrom returns DateJp instance from date string
 func DateFrom(s string) (DateJp, error) {
 	if len(s) == 0 || strings.EqualFold(s, "null") {
 		return NewDate(time.Time{}), nil
@@ -50,7 +50,7 @@ func DateFrom(s string) (DateJp, error) {
 	return NewDate(time.Time{}), lastErr
 }
 
-//UnmarshalJSON returns result of Unmarshal for json.Unmarshal()
+// UnmarshalJSON returns result of Unmarshal for json.Unmarshal()
 func (t *DateJp) UnmarshalJSON(b []byte) error {
 	s, err := strconv.Unquote(string(b))
 	if err != nil {
@@ -64,7 +64,7 @@ func (t *DateJp) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-//MarshalJSON returns time string with RFC3339 format
+// MarshalJSON returns time string with RFC3339 format
 func (t *DateJp) MarshalJSON() ([]byte, error) {
 	if t == nil {
 		return []byte("\"\""), nil
@@ -79,32 +79,32 @@ func (t DateJp) String() string {
 	return t.Format("2006-01-02")
 }
 
-//Equal reports whether t and dt represent the same time instant.
+// Equal reports whether t and dt represent the same time instant.
 func (t DateJp) Equal(dt DateJp) bool {
 	return t.Time.Year() == dt.Time.Year() && t.Time.Month() == dt.Time.Month() && t.Time.Day() == dt.Time.Day()
 }
 
-//Before reports whether the DateJp instant t is before dt.
+// Before reports whether the DateJp instant t is before dt.
 func (t DateJp) Before(dt DateJp) bool {
 	return !t.Equal(dt) && t.Time.Before(dt.Time)
 }
 
-//After reports whether the DateJp instant t is after dt.
+// After reports whether the DateJp instant t is after dt.
 func (t DateJp) After(dt DateJp) bool {
 	return !t.Equal(dt) && t.Time.After(dt.Time)
 }
 
-//AddDate method adds years/months/days and returns new Date instance.
+// AddDate method adds years/months/days and returns new Date instance.
 func (t DateJp) AddDate(years int, months int, days int) DateJp {
 	return NewDate(t.Time.AddDate(years, months, days))
 }
 
-//AddDay method adds n days and returns new Date instance.
+// AddDay method adds n days and returns new Date instance.
 func (t DateJp) AddDay(days int) DateJp {
 	return t.AddDate(0, 0, days)
 }
 
-/* Copyright 2020-2022 Spiegel
+/* Copyright 2020-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/goark/koyomi"
+	"github.com/goark/koyomi/value"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		}
 		tm = time.Date(args[0], time.Month(args[1]), args[2], 0, 0, 0, 0, time.Local)
 	}
-	te := koyomi.NewDate(tm)
+	te := value.NewDate(tm)
 	n, y := te.YearEraString()
 	if len(n) == 0 {
 		fmt.Fprintln(os.Stderr, "正しい年月日を指定してください")
@@ -42,7 +42,7 @@ func main() {
 	fmt.Printf("%s%s%d月%d日\n", n, y, te.Month(), te.Day())
 }
 
-/* Copyright 2019-2022 Spiegel
+/* Copyright 2019-2023 Spiegel
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
