@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/goark/koyomi"
+	"github.com/goark/koyomi/value"
 )
 
 func main() {
@@ -31,11 +31,11 @@ func main() {
 		}
 		args[i] = num
 	}
-	te := koyomi.NewDateEra(koyomi.EraName(name), args[0], time.Month(args[1]), args[2])
+	te := value.NewDateEra(value.EraName(name), args[0], time.Month(args[1]), args[2])
 	fmt.Println(te.Format("西暦2006年1月2日"))
 }
 
-/* Copyright 2019-2022 Spiegel
+/* Copyright 2019-2023 Spiegel
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.

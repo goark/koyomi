@@ -8,25 +8,26 @@ import (
 	"strconv"
 
 	"github.com/goark/errs"
+	"github.com/goark/koyomi/value"
 )
 
-//Event is koyomi event data
+// Event is koyomi event data
 type Event struct {
-	Date  DateJp
+	Date  value.DateJp
 	Title string
 }
 
-//Koyomi is array of Event
+// Koyomi is array of Event
 type Koyomi struct {
 	events []Event
 }
 
-//newKoyomi createw Koyomi instance
+// newKoyomi createw Koyomi instance
 func newKoyomi() *Koyomi {
 	return &Koyomi{events: make([]Event, 0)}
 }
 
-//Events returns event array
+// Events returns event array
 func (k *Koyomi) Events() []Event {
 	if k == nil {
 		return []Event{}
@@ -34,7 +35,7 @@ func (k *Koyomi) Events() []Event {
 	return k.events
 }
 
-//SortByDate sorts event data by date
+// SortByDate sorts event data by date
 func (k *Koyomi) SortByDate() {
 	if k == nil || len(k.events) <= 1 {
 		return
@@ -44,7 +45,7 @@ func (k *Koyomi) SortByDate() {
 	})
 }
 
-//Add adds other Kyomoi instance
+// Add adds other Kyomoi instance
 func (k *Koyomi) Add(kk *Koyomi) {
 	if kk == nil {
 		return

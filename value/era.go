@@ -1,11 +1,11 @@
-package koyomi
+package value
 
 import (
 	"fmt"
 	"time"
 )
 
-//eraName は元号名を表す内部型です。
+// eraName は元号名を表す内部型です。
 type eraName int
 
 const (
@@ -26,8 +26,8 @@ var eraString = map[eraName]string{
 	Reiwa:      "令和",
 }
 
-//koyomi.EraName() 関数は元号の文字列から元号名 eraName を取得します。
-//該当する元号名がない場合は era.Unknown を返します。
+// value.EraName() 関数は元号の文字列から元号名 eraName を取得します。
+// 該当する元号名がない場合は era.Unknown を返します。
 func EraName(s string) eraName {
 	for k, v := range eraString {
 		if v == s {
@@ -55,8 +55,8 @@ var (
 	eraSorted = []eraName{Reiwa, Heisei, Showa, Taisho, Meiji} //ソートされた元号の配列（降順）
 )
 
-//koyomi.NewDateEra() 関数は 元号・年・月・日・時・分・秒・タイムゾーン を指定して koyomi.DateJp 型のインスタンスを返します。
-//起点が定義されない元号を指定した場合は西暦として処理します。
+// value.NewDateEra() 関数は 元号・年・月・日・時・分・秒・タイムゾーン を指定して value.DateJp 型のインスタンスを返します。
+// 起点が定義されない元号を指定した場合は西暦として処理します。
 func NewDateEra(en eraName, year int, month time.Month, day int) DateJp {
 	ofset := 0
 	if dt, ok := eraTrigger[en]; ok {
@@ -65,8 +65,8 @@ func NewDateEra(en eraName, year int, month time.Month, day int) DateJp {
 	return NewDate(time.Date(year+ofset, month, day, 0, 0, 0, 0, JST))
 }
 
-//koyomi.DateJp.Era() メソッドは元号名 koyomi.eraName のインスタンスを返します。
-//元号が不明の場合は era.Unknown を返します。
+// value.DateJp.Era() メソッドは元号名 value.eraName のインスタンスを返します。
+// 元号が不明の場合は era.Unknown を返します。
 func (t DateJp) Era() eraName {
 	for _, es := range eraSorted {
 		if !t.Before(eraTrigger[es]) {
@@ -77,8 +77,8 @@ func (t DateJp) Era() eraName {
 
 }
 
-//koyomi.DateJp.YearEra() メソッドは元号付きの年の値を返します。
-//元号が不明の場合は (era.Unknown, 0) を返します。
+// value.DateJp.YearEra() メソッドは元号付きの年の値を返します。
+// 元号が不明の場合は (era.Unknown, 0) を返します。
 func (t DateJp) YearEra() (eraName, int) {
 	era := t.Era()
 	if era == EraUnknown {
@@ -91,8 +91,8 @@ func (t DateJp) YearEra() (eraName, int) {
 	return era, year
 }
 
-//koyomi.DateJp.YearEraString() メソッドは元号付きの年の値を文字列で返します。
-//元号が不明の場合は空文字列を返します。
+// value.DateJp.YearEraString() メソッドは元号付きの年の値を文字列で返します。
+// 元号が不明の場合は空文字列を返します。
 func (t DateJp) YearEraString() (string, string) {
 	era, year := t.YearEra()
 	if era == EraUnknown || year < 1 {
@@ -104,7 +104,7 @@ func (t DateJp) YearEraString() (string, string) {
 	return era.String(), fmt.Sprintf("%d年", year)
 }
 
-/* Copyright 2019-2022 Spiegel
+/* Copyright 2019-2023 Spiegel
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
