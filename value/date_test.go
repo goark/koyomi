@@ -11,6 +11,37 @@ type ForTestStruct struct {
 	DateTaken DateJp `json:"date_taken,omitempty"`
 }
 
+func TestWeekdayJp(t *testing.T) {
+	testCases := []struct {
+		s     string
+		name  string
+		short string
+	}{
+		{s: "2024-06-01T09:00:00+09:00", name: "土曜日", short: "土"},
+		{s: "2024-06-02T09:00:00+09:00", name: "日曜日", short: "日"},
+		{s: "2024-06-03T09:00:00+09:00", name: "月曜日", short: "月"},
+		{s: "2024-06-04T09:00:00+09:00", name: "火曜日", short: "火"},
+		{s: "2024-06-05T09:00:00+09:00", name: "水曜日", short: "水"},
+		{s: "2024-06-06T09:00:00+09:00", name: "木曜日", short: "木"},
+		{s: "2024-06-07T09:00:00+09:00", name: "金曜日", short: "金"},
+	}
+
+	for _, tc := range testCases {
+		dt, err := DateFrom(tc.s)
+		if err != nil {
+			t.Errorf("value.DateFrom() is \"%v\", want nil.", err)
+			continue
+		}
+		wd := dt.WeekdayJp()
+		if wd != tc.name {
+			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd, tc.name)
+		}
+		wd = dt.WeekdayJpShort()
+		if wd != tc.short {
+			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd, tc.short)
+		}
+	}
+}
 func TestUnmarshal(t *testing.T) {
 	testCases := []struct {
 		s    string
@@ -78,7 +109,7 @@ func TestEqual(t *testing.T) {
 	}
 }
 
-/* Copyright 2020-2023 Spiegel
+/* Copyright 2020-2024 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
