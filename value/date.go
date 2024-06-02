@@ -104,7 +104,20 @@ func (t DateJp) AddDay(days int) DateJp {
 	return t.AddDate(0, 0, days)
 }
 
-/* Copyright 2020-2023 Spiegel
+var weekdayNames = [7]string{"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"}
+var weekdayShortNames = [7]string{"日", "月", "火", "水", "木", "金", "土"}
+
+// WeekdayJp returns japanese weekday name.
+func (t DateJp) WeekdayJp() string {
+	return weekdayNames[t.Weekday()%7]
+}
+
+// WeekdayJp returns japanese weekday short name.
+func (t DateJp) WeekdayJpShort() string {
+	return weekdayShortNames[t.Weekday()%7]
+}
+
+/* Copyright 2020-2024 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -1,9 +1,9 @@
 module github.com/goark/koyomi
 
-go 1.20
+go 1.22
 
 require (
-	github.com/goark/errs v1.2.2
+	github.com/goark/errs v1.3.2
 	github.com/spiegel-im-spiegel/ics-golang v0.1.0
 )
 
