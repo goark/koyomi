@@ -1,6 +1,8 @@
 module github.com/goark/koyomi
 
-go 1.22
+go 1.23
+
+toolchain go1.23.6
 
 require (
 	github.com/goark/errs v1.3.2

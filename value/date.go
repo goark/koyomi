@@ -8,6 +8,41 @@ import (
 	"github.com/goark/errs"
 )
 
+// WeekdayJp represents the days of the week in Japanese.
+// It is an integer type where each value corresponds to a specific day of the week.
+type WeekdayJp int
+
+const (
+	Sunday    WeekdayJp = iota // 日曜日
+	Monday                     // 月曜日
+	Tuesday                    // 火曜日
+	Wednesday                  // 水曜日
+	Thursday                   // 木曜日
+	Friday                     // 金曜日
+	Saturday                   // 土曜日
+)
+
+var weekdayNames = [7]string{"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"}
+var weekdayShortNames = [7]string{"日", "月", "火", "水", "木", "金", "土"}
+
+// String returns the Japanese name of the weekday represented by the WeekdayJp type.
+// If the WeekdayJp value is out of the valid range (Sunday to Saturday), it returns an empty string.
+func (w WeekdayJp) String() string {
+	if w < Sunday || w > Saturday {
+		return ""
+	}
+	return weekdayNames[w]
+}
+
+// ShortString returns the short string representation of the Japanese weekday.
+// If the WeekdayJp value is out of the valid range (Sunday to Saturday), it returns an empty string.
+func (w WeekdayJp) ShortString() string {
+	if w < Sunday || w > Saturday {
+		return ""
+	}
+	return weekdayShortNames[w]
+}
+
 var (
 	jstoffset = int64((9 * time.Hour).Seconds())
 	JST       = time.FixedZone("JST", int(jstoffset)) // Japan standard Time
@@ -104,20 +139,13 @@ func (t DateJp) AddDay(days int) DateJp {
 	return t.AddDate(0, 0, days)
 }
 
-var weekdayNames = [7]string{"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"}
-var weekdayShortNames = [7]string{"日", "月", "火", "水", "木", "金", "土"}
-
-// WeekdayJp returns japanese weekday name.
-func (t DateJp) WeekdayJp() string {
-	return weekdayNames[t.Weekday()%7]
+// WeekdayJp returns the Japanese representation of the weekday for the given DateJp.
+// It converts the standard weekday to a WeekdayJp type.
+func (t DateJp) WeekdayJp() WeekdayJp {
+	return WeekdayJp(t.Weekday())
 }
 
-// WeekdayJp returns japanese weekday short name.
-func (t DateJp) WeekdayJpShort() string {
-	return weekdayShortNames[t.Weekday()%7]
-}
-
-/* Copyright 2020-2024 Spiegel
+/* Copyright 2020-2025 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

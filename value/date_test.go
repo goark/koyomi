@@ -33,12 +33,11 @@ func TestWeekdayJp(t *testing.T) {
 			continue
 		}
 		wd := dt.WeekdayJp()
-		if wd != tc.name {
-			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd, tc.name)
+		if wd.String() != tc.name {
+			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd.String(), tc.name)
 		}
-		wd = dt.WeekdayJpShort()
-		if wd != tc.short {
-			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd, tc.short)
+		if wd.ShortString() != tc.short {
+			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd.ShortString(), tc.short)
 		}
 	}
 }
