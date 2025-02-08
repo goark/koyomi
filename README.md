@@ -23,6 +23,8 @@ const (
 
 ## 簡単な使い方
 
+### CSV 形式で出力
+
 ```go
 start, _ := value.DateFrom("2019-05-01")
 end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
@@ -53,6 +55,46 @@ io.Copy(os.Stdout, bytes.NewReader(csv))
 //"2019-05-21","小満"
 ```
 
+### テンプレートを指定して出力
+
+```go
+	start, _ := value.DateFrom("2019-05-01")
+	end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, value.JST))
+	k, err := koyomi.NewSource(
+		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
+		koyomi.WithStartDate(start),
+		koyomi.WithEndDate(end),
+	).Get()
+	if err != nil {
+		return
+	}
+
+	myTemplate := `| 日付 | 曜日 | 内容 |
+| ---- |:----:| ---- |
+{{ range . }}| {{ .Date.StringJp }} | {{ .Date.WeekdayJp.ShortStringJp }} | {{ .Title }} |
+{{ end -}}`
+
+	t, err := template.New("").Parse(myTemplate)
+	if err != nil {
+		return
+	}
+	if err := t.Execute(os.Stdout, k.Events()); err != nil {
+		return
+	}
+	//Output:
+	//| 日付 | 曜日 | 内容 |
+	//| ---- |:----:| ---- |
+	//| 2019年5月1日 | 水 | 休日 (天皇の即位の日) |
+	//| 2019年5月2日 | 木 | 休日 |
+	//| 2019年5月2日 | 木 | 八十八夜 |
+	//| 2019年5月3日 | 金 | 憲法記念日 |
+	//| 2019年5月4日 | 土 | みどりの日 |
+	//| 2019年5月5日 | 日 | こどもの日 |
+	//| 2019年5月6日 | 月 | 休日 |
+	//| 2019年5月6日 | 月 | 立夏 |
+	//| 2019年5月21日 | 火 | 小満 |
+```
+
 ## おまけ機能
 
 ### 西暦⇔和暦 変換
@@ -71,9 +113,6 @@ io.Copy(os.Stdout, bytes.NewReader(csv))
 #### 西暦から和暦への変換
 
 ```go
-//go:build run
-// +build run
-
 package main
 
 import (
@@ -129,9 +168,6 @@ $ go run sample/sample1.go 2019 5 1
 #### 和暦から西暦への変換
 
 ```go
-//go:build run
-// +build run
-
 package main
 
 import (
@@ -180,9 +216,6 @@ $ go run sample/sample2.go 令和 1 5 1
 ### 十干十二支を数え上げる
 
 ```go
-//go:build run
-// +build run
-
 package main
 
 import (
@@ -226,9 +259,6 @@ Day 2021-07-28 is 丁丑
 ### ユリウス日
 
 ```go
-//go:build run
-// +build run
-
 package main
 
 import (

@@ -92,6 +92,7 @@ func TestEraToDate(t *testing.T) {
 		{n: EraUnknown, year: 2019, month: time.May, day: 1, timeStr: "2019-05-01"},
 		{n: Heisei, year: 31, month: time.May, day: 1, timeStr: "2019-05-01"},
 		{n: Reiwa, year: 1, month: time.May, day: 1, timeStr: "2019-05-01"},
+		{n: Showa, year: 100, month: time.January, day: 1, timeStr: "2025-01-01"},
 	}
 	for _, tc := range testCases {
 		tm := NewDateEra(tc.n, tc.year, tc.month, tc.day)
@@ -102,7 +103,7 @@ func TestEraToDate(t *testing.T) {
 	}
 }
 
-/* Copyright 2019-2023 Spiegel
+/* Copyright 2019-2025 Spiegel
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
