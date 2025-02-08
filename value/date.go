@@ -8,37 +8,44 @@ import (
 	"github.com/goark/errs"
 )
 
-// WeekdayJp represents the days of the week in Japanese.
-// It is an integer type where each value corresponds to a specific day of the week.
-type WeekdayJp int
+// WeekdayJp is a type that represents the days of the week in the Japanese context.
+// It is based on the time.Weekday type from the standard library.
+type WeekdayJp time.Weekday
 
 const (
-	Sunday    WeekdayJp = iota // 日曜日
-	Monday                     // 月曜日
-	Tuesday                    // 火曜日
-	Wednesday                  // 水曜日
-	Thursday                   // 木曜日
-	Friday                     // 金曜日
-	Saturday                   // 土曜日
+	Sunday    WeekdayJp = WeekdayJp(time.Sunday) + iota // 日曜日
+	Monday                                              // 月曜日
+	Tuesday                                             // 火曜日
+	Wednesday                                           // 水曜日
+	Thursday                                            // 木曜日
+	Friday                                              // 金曜日
+	Saturday                                            // 土曜日
 )
 
 var weekdayNames = [7]string{"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"}
 var weekdayShortNames = [7]string{"日", "月", "火", "水", "木", "金", "土"}
 
-// String returns the Japanese name of the weekday represented by the WeekdayJp type.
-// If the WeekdayJp value is out of the valid range (Sunday to Saturday), it returns an empty string.
+// String returns the English name of the Japanese weekday (WeekdayJp)
+// by converting it to the standard time.Weekday type and calling its String method.
 func (w WeekdayJp) String() string {
+	return time.Weekday(w).String()
+}
+
+// StringJp returns the Japanese name of the WeekdayJp if it is between Sunday and Saturday.
+// If the WeekdayJp is out of this range, it returns the standard time.Weekday string representation.
+func (w WeekdayJp) StringJp() string {
 	if w < Sunday || w > Saturday {
-		return ""
+		return time.Weekday(w).String()
 	}
 	return weekdayNames[w]
 }
 
-// ShortString returns the short string representation of the Japanese weekday.
-// If the WeekdayJp value is out of the valid range (Sunday to Saturday), it returns an empty string.
-func (w WeekdayJp) ShortString() string {
+// ShortStringJp returns the short Japanese name of the WeekdayJp.
+// If the WeekdayJp is not within the valid range (Sunday to Saturday),
+// it returns the default string representation of the time.Weekday.
+func (w WeekdayJp) ShortStringJp() string {
 	if w < Sunday || w > Saturday {
-		return ""
+		return time.Weekday(w).String()
 	}
 	return weekdayShortNames[w]
 }
@@ -110,8 +117,15 @@ func (t *DateJp) MarshalJSON() ([]byte, error) {
 	return []byte(strconv.Quote(t.String())), nil
 }
 
+// String returns the DateJp value formatted as a string in the "2006-01-02" layout.
+// It implements the Stringer interface.
 func (t DateJp) String() string {
 	return t.Format("2006-01-02")
+}
+
+// StringJp returns the date in Japanese format (YYYY年M月D日).
+func (t DateJp) StringJp() string {
+	return t.Format("2006年1月2日")
 }
 
 // Equal reports whether t and dt represent the same time instant.

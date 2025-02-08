@@ -1,5 +1,5 @@
-//go:build run
-// +build run
+//go:build ignore
+// +build ignore
 
 package main
 

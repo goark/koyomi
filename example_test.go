@@ -14,10 +14,16 @@ import (
 func ExampleKoyomi() {
 	start, _ := value.DateFrom("2019-05-01")
 	end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, value.JST))
+	td, err := os.MkdirTemp(os.TempDir(), "sample")
+	if err != nil {
+		return
+	}
+	defer func() { _ = os.RemoveAll(td) }()
 	k, err := koyomi.NewSource(
 		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
 		koyomi.WithStartDate(start),
 		koyomi.WithEndDate(end),
+		koyomi.WithTempDir(td),
 	).Get()
 	if err != nil {
 		return
@@ -44,7 +50,7 @@ func ExampleKoyomi() {
 	//"2019-05-21","小満"
 }
 
-/* Copyright 2020-2023 Spiegel
+/* Copyright 2020-2025 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

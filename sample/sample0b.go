@@ -4,9 +4,8 @@
 package main
 
 import (
-	"bytes"
-	"io"
 	"os"
+	"text/template"
 	"time"
 
 	"github.com/goark/koyomi"
@@ -31,14 +30,33 @@ func main() {
 		return
 	}
 
-	csv, err := k.EncodeCSV()
+	myTemplate := `| 日付 | 曜日 | 内容 |
+| ---- |:----:| ---- |
+{{ range . }}| {{ .Date.StringJp }} | {{ .Date.WeekdayJp.ShortStringJp }} | {{ .Title }} |
+{{ end -}}`
+
+	t, err := template.New("").Parse(myTemplate)
 	if err != nil {
 		return
 	}
-	io.Copy(os.Stdout, bytes.NewReader(csv))
+	if err := t.Execute(os.Stdout, k.Events()); err != nil {
+		return
+	}
+	//Output:
+	//| 日付 | 曜日 | 内容 |
+	//| ---- |:----:| ---- |
+	//| 2019年5月1日 | 水 | 休日 (天皇の即位の日) |
+	//| 2019年5月2日 | 木 | 休日 |
+	//| 2019年5月2日 | 木 | 八十八夜 |
+	//| 2019年5月3日 | 金 | 憲法記念日 |
+	//| 2019年5月4日 | 土 | みどりの日 |
+	//| 2019年5月5日 | 日 | こどもの日 |
+	//| 2019年5月6日 | 月 | 休日 |
+	//| 2019年5月6日 | 月 | 立夏 |
+	//| 2019年5月21日 | 火 | 小満 |
 }
 
-/* Copyright 2023 Spiegel
+/* Copyright 2025 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -7,23 +7,20 @@ import (
 	"time"
 )
 
-type ForTestStruct struct {
-	DateTaken DateJp `json:"date_taken,omitempty"`
-}
-
 func TestWeekdayJp(t *testing.T) {
 	testCases := []struct {
-		s     string
-		name  string
-		short string
+		s      string
+		name   string
+		nameJp string
+		short  string
 	}{
-		{s: "2024-06-01T09:00:00+09:00", name: "土曜日", short: "土"},
-		{s: "2024-06-02T09:00:00+09:00", name: "日曜日", short: "日"},
-		{s: "2024-06-03T09:00:00+09:00", name: "月曜日", short: "月"},
-		{s: "2024-06-04T09:00:00+09:00", name: "火曜日", short: "火"},
-		{s: "2024-06-05T09:00:00+09:00", name: "水曜日", short: "水"},
-		{s: "2024-06-06T09:00:00+09:00", name: "木曜日", short: "木"},
-		{s: "2024-06-07T09:00:00+09:00", name: "金曜日", short: "金"},
+		{s: "2024-06-01T09:00:00+09:00", name: "Saturday", nameJp: "土曜日", short: "土"},
+		{s: "2024-06-02T09:00:00+09:00", name: "Sunday", nameJp: "日曜日", short: "日"},
+		{s: "2024-06-03T09:00:00+09:00", name: "Monday", nameJp: "月曜日", short: "月"},
+		{s: "2024-06-04T09:00:00+09:00", name: "Tuesday", nameJp: "火曜日", short: "火"},
+		{s: "2024-06-05T09:00:00+09:00", name: "Wednesday", nameJp: "水曜日", short: "水"},
+		{s: "2024-06-06T09:00:00+09:00", name: "Thursday", nameJp: "木曜日", short: "木"},
+		{s: "2024-06-07T09:00:00+09:00", name: "Friday", nameJp: "金曜日", short: "金"},
 	}
 
 	for _, tc := range testCases {
@@ -36,11 +33,69 @@ func TestWeekdayJp(t *testing.T) {
 		if wd.String() != tc.name {
 			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd.String(), tc.name)
 		}
-		if wd.ShortString() != tc.short {
-			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd.ShortString(), tc.short)
+		if wd.StringJp() != tc.nameJp {
+			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd.StringJp(), tc.nameJp)
+		}
+		if wd.ShortStringJp() != tc.short {
+			t.Errorf("DateJp.WeekdayJp() is \"%v\", want \"%v\".", wd.ShortStringJp(), tc.short)
 		}
 	}
 }
+
+func TestWeekdayJpErr(t *testing.T) {
+	testCases := []struct {
+		wd     WeekdayJp
+		name   string
+		nameJp string
+		short  string
+	}{
+		{wd: WeekdayJp(7), name: "%!Weekday(7)", nameJp: "%!Weekday(7)", short: "%!Weekday(7)"},
+	}
+
+	for _, tc := range testCases {
+		if tc.wd.String() != tc.name {
+			t.Errorf("WeekdayJp is \"%v\", want \"%v\".", tc.wd.String(), tc.name)
+		}
+		if tc.wd.StringJp() != tc.nameJp {
+			t.Errorf("WeekdayJp.StringJp() is \"%v\", want \"%v\".", tc.wd.StringJp(), tc.nameJp)
+		}
+		if tc.wd.ShortStringJp() != tc.short {
+			t.Errorf("WeekdayJp.ShortStringJp() is \"%v\", want \"%v\".", tc.wd.ShortStringJp(), tc.short)
+		}
+	}
+}
+
+func TestDateJp(t *testing.T) {
+	testCases := []struct {
+		s     string
+		str   string
+		strJp string
+	}{
+		{s: "2024-06-01T09:00:00+09:00", str: "2024-06-01", strJp: "2024年6月1日"},
+		{s: "2024-06-10T09:00:00+09:00", str: "2024-06-10", strJp: "2024年6月10日"},
+		{s: "2024-12-01T09:00:00+09:00", str: "2024-12-01", strJp: "2024年12月1日"},
+		{s: "2024-12-31T09:00:00+09:00", str: "2024-12-31", strJp: "2024年12月31日"},
+	}
+
+	for _, tc := range testCases {
+		dt, err := DateFrom(tc.s)
+		if err != nil {
+			t.Errorf("value.DateFrom() is \"%v\", want nil.", err)
+			continue
+		}
+		if dt.String() != tc.str {
+			t.Errorf("DateJp.String() is \"%v\", want \"%v\".", dt.String(), tc.str)
+		}
+		if dt.StringJp() != tc.strJp {
+			t.Errorf("DateJp.StringJp() is \"%v\", want \"%v\".", dt.StringJp(), tc.strJp)
+		}
+	}
+}
+
+type ForTestStruct struct {
+	DateTaken DateJp `json:"date_taken,omitempty"`
+}
+
 func TestUnmarshal(t *testing.T) {
 	testCases := []struct {
 		s    string
@@ -108,7 +163,7 @@ func TestEqual(t *testing.T) {
 	}
 }
 
-/* Copyright 2020-2024 Spiegel
+/* Copyright 2020-2025 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
