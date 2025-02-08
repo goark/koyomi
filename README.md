@@ -26,73 +26,101 @@ const (
 ### CSV 形式で出力
 
 ```go
-start, _ := value.DateFrom("2019-05-01")
-end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, koyomi.JST))
-k, err := koyomi.NewSource(
-    koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
-    koyomi.WithStartDate(start),
-    koyomi.WithEndDate(end),
-).Get()
-if err != nil {
-    return
-}
+package main
 
-csv, err := k.EncodeCSV()
-if err != nil {
-    return
+import (
+    "bytes"
+    "io"
+    "os"
+    "time"
+
+    "github.com/goark/koyomi"
+    "github.com/goark/koyomi/value"
+)
+
+func main() {
+    start, _ := value.DateFrom("2019-05-01")
+    end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, value.JST))
+    td, err := os.MkdirTemp(os.TempDir(), "sample")
+    if err != nil {
+        return
+    }
+    defer func() { _ = os.RemoveAll(td) }()
+    k, err := koyomi.NewSource(
+        koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
+        koyomi.WithStartDate(start),
+        koyomi.WithEndDate(end),
+        koyomi.WithTempDir(td),
+    ).Get()
+    if err != nil {
+        return
+    }
+
+    csv, err := k.EncodeCSV()
+    if err != nil {
+        return
+    }
+    io.Copy(os.Stdout, bytes.NewReader(csv))
 }
-io.Copy(os.Stdout, bytes.NewReader(csv))
-//Output:
-//"Date","Title"
-//"2019-05-01","休日 (天皇の即位の日)"
-//"2019-05-02","休日"
-//"2019-05-02","八十八夜"
-//"2019-05-03","憲法記念日"
-//"2019-05-04","みどりの日"
-//"2019-05-05","こどもの日"
-//"2019-05-06","休日"
-//"2019-05-06","立夏"
-//"2019-05-21","小満"
 ```
 
 ### テンプレートを指定して出力
 
 ```go
-	start, _ := value.DateFrom("2019-05-01")
-	end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, value.JST))
-	k, err := koyomi.NewSource(
-		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
-		koyomi.WithStartDate(start),
-		koyomi.WithEndDate(end),
-	).Get()
-	if err != nil {
-		return
-	}
+package main
 
-	myTemplate := `| 日付 | 曜日 | 内容 |
+import (
+    "os"
+    "text/template"
+    "time"
+
+    "github.com/goark/koyomi"
+    "github.com/goark/koyomi/value"
+)
+
+func main() {
+    start, _ := value.DateFrom("2019-05-01")
+    end := value.NewDate(time.Date(2019, time.May, 31, 0, 0, 0, 0, value.JST))
+    td, err := os.MkdirTemp(os.TempDir(), "sample")
+    if err != nil {
+        return
+    }
+    defer func() { _ = os.RemoveAll(td) }()
+    k, err := koyomi.NewSource(
+        koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
+        koyomi.WithStartDate(start),
+        koyomi.WithEndDate(end),
+        koyomi.WithTempDir(td),
+    ).Get()
+    if err != nil {
+        return
+    }
+
+    myTemplate := `| 日付 | 曜日 | 内容 |
 | ---- |:----:| ---- |
 {{ range . }}| {{ .Date.StringJp }} | {{ .Date.WeekdayJp.ShortStringJp }} | {{ .Title }} |
 {{ end -}}`
 
-	t, err := template.New("").Parse(myTemplate)
-	if err != nil {
-		return
-	}
-	if err := t.Execute(os.Stdout, k.Events()); err != nil {
-		return
-	}
-	//Output:
-	//| 日付 | 曜日 | 内容 |
-	//| ---- |:----:| ---- |
-	//| 2019年5月1日 | 水 | 休日 (天皇の即位の日) |
-	//| 2019年5月2日 | 木 | 休日 |
-	//| 2019年5月2日 | 木 | 八十八夜 |
-	//| 2019年5月3日 | 金 | 憲法記念日 |
-	//| 2019年5月4日 | 土 | みどりの日 |
-	//| 2019年5月5日 | 日 | こどもの日 |
-	//| 2019年5月6日 | 月 | 休日 |
-	//| 2019年5月6日 | 月 | 立夏 |
-	//| 2019年5月21日 | 火 | 小満 |
+    t, err := template.New("").Parse(myTemplate)
+    if err != nil {
+        return
+    }
+    if err := t.Execute(os.Stdout, k.Events()); err != nil {
+        return
+    }
+    //Output:
+    //| 日付 | 曜日 | 内容 |
+    //| ---- |:----:| ---- |
+    //| 2019年5月1日 | 水 | 休日 (天皇の即位の日) |
+    //| 2019年5月2日 | 木 | 休日 |
+    //| 2019年5月2日 | 木 | 八十八夜 |
+    //| 2019年5月3日 | 金 | 憲法記念日 |
+    //| 2019年5月4日 | 土 | みどりの日 |
+    //| 2019年5月5日 | 日 | こどもの日 |
+    //| 2019年5月6日 | 月 | 休日 |
+    //| 2019年5月6日 | 月 | 立夏 |
+    //| 2019年5月21日 | 火 | 小満 |
+}
 ```
 
 ## おまけ機能
@@ -100,7 +128,7 @@ io.Copy(os.Stdout, bytes.NewReader(csv))
 ### 西暦⇔和暦 変換
 
 元号を含む和暦と西暦との変換を行います。
-元号は以下のものに対応しています。
+元号は以下のものに対応しています（グレゴリオ暦採用以降）。
 
 | 元号             | 起点           |
 | ---------------- | -------------- |
@@ -211,6 +239,9 @@ $ go run sample/sample2.go 平成 31 4 30
 
 $ go run sample/sample2.go 令和 1 5 1
 西暦2019年5月1日
+
+$ go run sample/sample2.go 昭和 100 1 1
+西暦2025年1月1日
 ```
 
 ### 十干十二支を数え上げる
@@ -307,5 +338,5 @@ Julian Day Number of 2023-02-25 is 2460000
     - [ユリウス日について - 国立天文台暦計算室](https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2023_1.html)
 - [日本の暦情報を取得するパッケージを作ってみた — リリース情報 | text.Baldanders.info](https://text.baldanders.info/release/2020/05/koyomi/)
 
-[Go 言語]: https://golang.org/ "The Go Programming Language"
+[Go 言語]: https://go.dev/ "The Go Programming Language"
 [koyomi]: https://github.com/goark/koyomi "goark/koyomi: 日本のこよみ"
