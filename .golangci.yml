@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  exclusions:
+    rules:
+      - path: zodiac/zodiac.go
+        linters: [gosec]
+        text: "G115:"

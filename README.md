@@ -1,6 +1,5 @@
 # [koyomi] -- 日本のこよみ
 
-[![check vulns](https://github.com/goark/koyomi/workflows/vulns/badge.svg)](https://github.com/goark/koyomi/actions)
 [![lint status](https://github.com/goark/koyomi/workflows/lint/badge.svg)](https://github.com/goark/koyomi/actions)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/goark/koyomi/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/goark/koyomi.svg)](https://github.com/goark/koyomi/releases/latest)
