@@ -120,7 +120,7 @@ func TestUnmarshal(t *testing.T) {
 		if str != tc.str {
 			t.Errorf("DateJp = \"%v\", want \"%v\".", str, tc.str)
 		}
-		str2 := tst.DateTaken.Time.Format(time.RFC3339)
+		str2 := tst.DateTaken.Format(time.RFC3339)
 		if str2 != tc.str2 {
 			t.Errorf("DateJp = \"%v\", want \"%v\".", str2, tc.str2)
 		}
@@ -163,7 +163,7 @@ func TestEqual(t *testing.T) {
 	}
 }
 
-/* Copyright 2020-2025 Spiegel
+/* Copyright 2020-2026 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
