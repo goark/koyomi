@@ -78,15 +78,14 @@ func (k *Koyomi) EncodeCSV() ([]byte, error) {
 		return nil, errs.Wrap(err)
 	}
 	for _, e := range k.events {
-		_, err := buf.WriteString(fmt.Sprintf("%s,%s\n", strconv.Quote(e.Date.String()), strconv.Quote(e.Title)))
-		if err != nil {
+		if _, err := fmt.Fprintf(buf, "%s,%s\n", strconv.Quote(e.Date.String()), strconv.Quote(e.Title)); err != nil {
 			return nil, errs.Wrap(err)
 		}
 	}
 	return buf.Bytes(), nil
 }
 
-/* Copyright 2020-2022 Spiegel
+/* Copyright 2020-2026 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

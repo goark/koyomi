@@ -130,7 +130,7 @@ func (t DateJp) StringJp() string {
 
 // Equal reports whether t and dt represent the same time instant.
 func (t DateJp) Equal(dt DateJp) bool {
-	return t.Time.Year() == dt.Time.Year() && t.Time.Month() == dt.Time.Month() && t.Time.Day() == dt.Time.Day()
+	return t.Year() == dt.Year() && t.Month() == dt.Month() && t.Day() == dt.Day()
 }
 
 // Before reports whether the DateJp instant t is before dt.
@@ -159,7 +159,7 @@ func (t DateJp) WeekdayJp() WeekdayJp {
 	return WeekdayJp(t.Weekday())
 }
 
-/* Copyright 2020-2025 Spiegel
+/* Copyright 2020-2026 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

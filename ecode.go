@@ -3,12 +3,12 @@ package koyomi
 import "errors"
 
 var (
-	ErrNullPointer   = errors.New("Null reference instance")
-	ErrNoData        = errors.New("No data")
-	ErrInvalidRecord = errors.New("Invalid record")
+	ErrNullPointer   = errors.New("null reference instance")
+	ErrNoData        = errors.New("no data")
+	ErrInvalidRecord = errors.New("invalid record")
 )
 
-/* Copyright 2020-2022 Spiegel
+/* Copyright 2020-2026 Spiegel
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
