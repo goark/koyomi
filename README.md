@@ -342,6 +342,46 @@ $ go run sample/sample4.go 2023-02-25
 Julian Day Number of 2023-02-25 is 2460000
 ```
 
+### 日付を5日分イテレートする
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "time"
+
+    "github.com/goark/koyomi/value"
+)
+
+func main() {
+    start := value.NewDateYMD(2024, time.June, 1)
+    until := start.AddDay(4)
+
+    seq, err := start.IterDay(1, until)
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        return
+    }
+
+    for d := range seq {
+        fmt.Println(d.String())
+    }
+}
+```
+
+これを実行すると以下のような結果になります。
+
+```
+$ go run sample/sample5.go
+2024-06-01
+2024-06-02
+2024-06-03
+2024-06-04
+2024-06-05
+```
+
 ## Modules Requirement Graph
 
 [![dependency.png](./dependency.png)](./dependency.png)
