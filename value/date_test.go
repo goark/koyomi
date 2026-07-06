@@ -92,6 +92,29 @@ func TestDateJp(t *testing.T) {
 	}
 }
 
+func TestNewDateYMD(t *testing.T) {
+	testCases := []struct {
+		year  int
+		month time.Month
+		day   int
+		want  string
+	}{
+		{year: 2024, month: time.June, day: 1, want: "2024-06-01"},
+		{year: 2024, month: time.December, day: 31, want: "2024-12-31"},
+		{year: 2019, month: time.May, day: 1, want: "2019-05-01"},
+	}
+
+	for _, tc := range testCases {
+		dt := NewDateYMD(tc.year, tc.month, tc.day)
+		if got := dt.String(); got != tc.want {
+			t.Errorf("value.NewDateYMD(%d, %v, %d) is %q, want %q", tc.year, tc.month, tc.day, got, tc.want)
+		}
+		if _, offset := dt.Zone(); offset != int((9 * time.Hour).Seconds()) {
+			t.Errorf("value.NewDateYMD(%d, %v, %d) zone offset is %d, want %d", tc.year, tc.month, tc.day, offset, int((9 * time.Hour).Seconds()))
+		}
+	}
+}
+
 type ForTestStruct struct {
 	DateTaken DateJp `json:"date_taken,omitempty"`
 }
