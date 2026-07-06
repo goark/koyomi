@@ -1,12 +1,12 @@
 # [koyomi] -- 日本のこよみ
 
-[![lint status](https://github.com/goark/koyomi/workflows/lint/badge.svg)](https://github.com/goark/koyomi/actions)
+[![ci status](https://github.com/goark/koyomi/workflows/ci/badge.svg)](https://github.com/goark/koyomi/actions)
+[![codeql status](https://github.com/goark/koyomi/workflows/CodeQL/badge.svg)](https://github.com/goark/koyomi/actions)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/goark/koyomi/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/goark/koyomi.svg)](https://github.com/goark/koyomi/releases/latest)
+[![Go reference](https://pkg.go.dev/badge/github.com/goark/koyomi.svg)](https://pkg.go.dev/github.com/goark/koyomi)
 
-**Migrated repository to [github.com/goark/koyomi][koyomi]**
-
-「[国立天文台 天文情報センター 暦計算室](http://eco.mtk.nao.ac.jp/koyomi/)」より日本の暦情報を取得する [Go 言語]用パッケージです。 Google Calendar を経由して取得しています。
+「[国立天文台 天文情報センター 暦計算室](https://eco.mtk.nao.ac.jp/koyomi/)」より日本の暦情報を取得する [Go 言語]用パッケージです。 Google Calendar を経由して取得しています。
 
 取得可能な情報は以下の通りです。
 
@@ -20,7 +20,23 @@ const (
 )
 ```
 
+## インストールと動作要件
+
+- Go 1.25 以上（開発時 toolchain は 1.26.3）
+
+```bash
+go get github.com/goark/koyomi@latest
+```
+
+## 利用時の前提
+
+- データ取得にはネットワーク接続が必要です。
+- 暦情報は外部データソース（国立天文台/Google Calendar）に依存するため、配信内容の変更が結果に反映される場合があります。
+- 日付計算は日本標準時（JST）を前提としています。
+
 ## 簡単な使い方
+
+以下のサンプルは説明を簡潔にするため、エラー詳細の標準エラー出力を一部省略しています。
 
 ### CSV 形式で出力
 
@@ -122,7 +138,7 @@ func main() {
 }
 ```
 
-## おまけ機能
+## 付属ユーティリティ
 
 ### 西暦⇔和暦 変換
 
