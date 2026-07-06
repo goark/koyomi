@@ -75,6 +75,13 @@ func NewDate(tm time.Time) DateJp {
 	return DateJp{time.Unix(((ut+int64(offset))/86400)*86400-jstoffset, 0).In(JST)}
 }
 
+// NewDateYMD returns DateJp from explicit year/month/day values.
+//
+// The generated value is interpreted in JST and normalized by NewDate.
+func NewDateYMD(year int, month time.Month, day int) DateJp {
+	return NewDate(time.Date(year, month, day, 0, 0, 0, 0, JST))
+}
+
 var timeTemplate = []string{
 	"2006-01-02",
 	"2006-01",
