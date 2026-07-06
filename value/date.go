@@ -90,21 +90,22 @@ var timeTemplate = []string{
 //
 // The parsed value is normalized by NewDate (JST date boundary).
 // Empty string or "null" returns a zero DateJp with nil error.
-// If all parse attempts fail, DateFrom returns zero DateJp and the last wrapped
-// parse error with context keys "time_string" and "time_template".
+// If all parse attempts fail, DateFrom returns zero DateJp and aggregated
+// wrapped parse errors for all attempted templates. Each wrapped error includes
+// context keys "time_string" and "time_template".
 func DateFrom(s string) (DateJp, error) {
 	if len(s) == 0 || strings.EqualFold(s, "null") {
 		return NewDate(time.Time{}), nil
 	}
-	var lastErr error
+	errlist := &errs.Errors{}
 	for _, tmplt := range timeTemplate {
 		if tm, err := time.Parse(tmplt, s); err != nil {
-			lastErr = errs.Wrap(err, errs.WithContext("time_string", s), errs.WithContext("time_template", tmplt))
+			errlist.Add(errs.Wrap(err, errs.WithContext("time_string", s), errs.WithContext("time_template", tmplt)))
 		} else {
 			return NewDate(tm), nil
 		}
 	}
-	return NewDate(time.Time{}), lastErr
+	return NewDate(time.Time{}), errlist.ErrorOrNil()
 }
 
 // UnmarshalJSON returns result of Unmarshal for json.Unmarshal()
