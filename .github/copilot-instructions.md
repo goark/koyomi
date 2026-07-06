@@ -88,3 +88,10 @@ When editing workflows:
 - Summarize what changed and why.
 - Mention validation commands that were run.
 - Call out residual risks or follow-up tasks.
+
+## Git Branch Workflow
+
+- Do not commit directly to `master` for regular changes.
+- Start work from an up-to-date `master`, then create a topic branch (`feat/*`, `fix/*`, `chore/*`, `docs/*`).
+- Push the topic branch and open a pull request targeting `master`.
+- Keep commits scoped by intent (for example: docs, ci, chore) for easier review and rollback.
