@@ -1,6 +1,7 @@
 package value
 
 import (
+	"iter"
 	"strconv"
 	"strings"
 	"time"
@@ -174,6 +175,39 @@ func (t DateJp) AddDate(years int, months int, days int) DateJp {
 // AddDay method adds n days and returns new Date instance.
 func (t DateJp) AddDay(days int) DateJp {
 	return t.AddDate(0, 0, days)
+}
+
+// IterDay returns an iterator that yields DateJp values from t to until.
+//
+// The iterator yields both endpoints and advances by AddDay(count) on each step.
+// A non-zero count is required. If count and until cannot reach each other
+// (direction mismatch or non-divisible distance), IterDay returns an error.
+func (t DateJp) IterDay(count int, until DateJp) (iter.Seq[DateJp], error) {
+	if count == 0 {
+		return nil, errs.Wrap(ErrInvalidCount, errs.WithContext("count", count), errs.WithContext("start", t.String()), errs.WithContext("until", until.String()))
+	}
+
+	diff := int(until.Sub(t.Time).Hours() / 24)
+	if (count > 0 && diff < 0) || (count < 0 && diff > 0) {
+		return nil, errs.Wrap(ErrInfiniteLoop, errs.WithContext("count", count), errs.WithContext("start", t.String()), errs.WithContext("until", until.String()))
+	}
+
+	absCount := count
+	if absCount < 0 {
+		absCount = -absCount
+	}
+	if diff%absCount != 0 {
+		return nil, errs.Wrap(ErrInfiniteLoop, errs.WithContext("count", count), errs.WithContext("start", t.String()), errs.WithContext("until", until.String()))
+	}
+
+	steps := diff / count
+	return func(yield func(DateJp) bool) {
+		for i := 0; i <= steps; i++ {
+			if !yield(t.AddDay(i * count)) {
+				return
+			}
+		}
+	}, nil
 }
 
 // WeekdayJp returns the Japanese representation of the weekday for the given DateJp.

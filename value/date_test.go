@@ -2,6 +2,7 @@ package value
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"testing"
 	"time"
@@ -183,6 +184,97 @@ func TestEqual(t *testing.T) {
 	}
 	if !dt1.AddDay(1).Equal(dt2) {
 		t.Error("DateJp.Equal() is false, want true.")
+	}
+}
+
+func TestIterDayForward(t *testing.T) {
+	start := NewDateYMD(2024, time.June, 1)
+	until := NewDateYMD(2024, time.June, 3)
+
+	seq, err := start.IterDay(1, until)
+	if err != nil {
+		t.Errorf("DateJp.IterDay() is %v, want nil.", err)
+		return
+	}
+
+	want := []string{"2024-06-01", "2024-06-02", "2024-06-03"}
+	idx := 0
+	for dt := range seq {
+		if idx >= len(want) {
+			t.Errorf("DateJp.IterDay() yielded too many values, got at least %d", idx+1)
+			return
+		}
+		if got := dt.String(); got != want[idx] {
+			t.Errorf("DateJp.IterDay()[%d] is %q, want %q", idx, got, want[idx])
+		}
+		idx++
+	}
+	if idx != len(want) {
+		t.Errorf("DateJp.IterDay() yielded %d values, want %d", idx, len(want))
+	}
+}
+
+func TestIterDayBackward(t *testing.T) {
+	start := NewDateYMD(2024, time.June, 3)
+	until := NewDateYMD(2024, time.June, 1)
+
+	seq, err := start.IterDay(-1, until)
+	if err != nil {
+		t.Errorf("DateJp.IterDay() is %v, want nil.", err)
+		return
+	}
+
+	want := []string{"2024-06-03", "2024-06-02", "2024-06-01"}
+	idx := 0
+	for dt := range seq {
+		if idx >= len(want) {
+			t.Errorf("DateJp.IterDay() yielded too many values, got at least %d", idx+1)
+			return
+		}
+		if got := dt.String(); got != want[idx] {
+			t.Errorf("DateJp.IterDay()[%d] is %q, want %q", idx, got, want[idx])
+		}
+		idx++
+	}
+	if idx != len(want) {
+		t.Errorf("DateJp.IterDay() yielded %d values, want %d", idx, len(want))
+	}
+}
+
+func TestIterDayErrInvalidCount(t *testing.T) {
+	start := NewDateYMD(2024, time.June, 1)
+	until := NewDateYMD(2024, time.June, 3)
+
+	_, err := start.IterDay(0, until)
+	if err == nil {
+		t.Error("DateJp.IterDay() error = nil, not want nil.")
+		return
+	}
+	if !errors.Is(err, ErrInvalidCount) {
+		t.Errorf("DateJp.IterDay() error = %v, want errors.Is(..., ErrInvalidCount) true.", err)
+	}
+}
+
+func TestIterDayErrInfiniteLoop(t *testing.T) {
+	testCases := []struct {
+		name  string
+		start DateJp
+		count int
+		until DateJp
+	}{
+		{name: "direction mismatch", start: NewDateYMD(2024, time.June, 3), count: 1, until: NewDateYMD(2024, time.June, 1)},
+		{name: "step never reaches until", start: NewDateYMD(2024, time.June, 1), count: 2, until: NewDateYMD(2024, time.June, 4)},
+	}
+
+	for _, tc := range testCases {
+		_, err := tc.start.IterDay(tc.count, tc.until)
+		if err == nil {
+			t.Errorf("DateJp.IterDay(%s) error = nil, not want nil.", tc.name)
+			continue
+		}
+		if !errors.Is(err, ErrInfiniteLoop) {
+			t.Errorf("DateJp.IterDay(%s) error = %v, want errors.Is(..., ErrInfiniteLoop) true.", tc.name, err)
+		}
 	}
 }
 
