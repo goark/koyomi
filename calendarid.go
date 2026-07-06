@@ -20,7 +20,7 @@ var cidMap = map[CalendarID]string{
 	Planet:    "fsj78svf2km2stokku3r2ajuts@group.calendar.google.com", //惑星現象
 }
 
-//String is Stringer of CalendarID
+// String is Stringer of CalendarID
 func (cid CalendarID) String() string {
 	if s, ok := cidMap[cid]; ok {
 		return s
@@ -28,7 +28,7 @@ func (cid CalendarID) String() string {
 	return ""
 }
 
-//URL returns URL string from CalendarID
+// URL returns URL string from CalendarID
 func (cid CalendarID) URL() string {
 	id := cid.String()
 	if len(id) == 0 {
