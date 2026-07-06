@@ -60,7 +60,12 @@ type DateJp struct {
 	time.Time
 }
 
-// NewDate returns DateJp instance
+// NewDate converts tm to DateJp normalized to a JST calendar day.
+//
+// For non-zero time values, the returned value is truncated to 00:00:00 in JST
+// for the date that tm represents in its original location/offset. This keeps
+// comparisons and date-based operations stable regardless of input time-of-day.
+// For zero time values, NewDate preserves zero and returns it as-is.
 func NewDate(tm time.Time) DateJp {
 	if tm.IsZero() {
 		return DateJp{tm}
@@ -76,7 +81,17 @@ var timeTemplate = []string{
 	time.RFC3339,
 }
 
-// DateFrom returns DateJp instance from date string
+// DateFrom parses s and returns a normalized DateJp value.
+//
+// Accepted formats are:
+//   - 2006-01-02
+//   - 2006-01
+//   - RFC3339
+//
+// The parsed value is normalized by NewDate (JST date boundary).
+// Empty string or "null" returns a zero DateJp with nil error.
+// If all parse attempts fail, DateFrom returns zero DateJp and the last wrapped
+// parse error with context keys "time_string" and "time_template".
 func DateFrom(s string) (DateJp, error) {
 	if len(s) == 0 || strings.EqualFold(s, "null") {
 		return NewDate(time.Time{}), nil
