@@ -58,6 +58,11 @@ If Go files changed, keep formatting clean:
 gofmt -w <changed-go-files>
 ```
 
+Task command notes:
+
+- `task -f` is the force execution flag.
+- Use `task -t Taskfile.yml` when explicitly specifying a Taskfile path.
+
 ## Documentation
 
 - Keep `README.md` examples runnable and aligned with current APIs.

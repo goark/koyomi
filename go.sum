@@ -1,9 +1,9 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/goark/errs v1.3.3 h1:vqzm/1aqvh4Ha8JDqIqIU5ZoBtjaRezFcMC55B5ljAM=
-github.com/goark/errs v1.3.3/go.mod h1:4xM7rorwYQlqh9kUhfKpC5P7VAJW2KfvuQpYnTaU0ek=
-github.com/goark/fetch v0.5.1 h1:AZql1WTANG9umytvf4EzMzIyGHY4RP+N6Q5n0ALxRr0=
-github.com/goark/fetch v0.5.1/go.mod h1:blLKmPKgSDw33ocut79ypHT4V0MLmfVY/MHKpq+OgD4=
+github.com/goark/errs v1.3.4 h1:/+/xwF3UwXGxGGLurzBTaMMoryTBeaPfheJ1aW9cglA=
+github.com/goark/errs v1.3.4/go.mod h1:4xM7rorwYQlqh9kUhfKpC5P7VAJW2KfvuQpYnTaU0ek=
+github.com/goark/fetch v0.5.3 h1:ZwT5N04BSiPw2tF2gG5MXsmoSr+A/sxE52KJWy/aWzw=
+github.com/goark/fetch v0.5.3/go.mod h1:jgu+bn1HN8AfEks+ENqiPJVF99Cvs7cb2dqSujhjsOE=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/spiegel-im-spiegel/ics-golang v0.1.2 h1:tXyFHjh529OCseND8Pksrpl67jmmrwQ4sxsHMoTwxAw=
