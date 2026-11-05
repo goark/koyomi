@@ -1,6 +1,8 @@
 package koyomi
 
 import (
+	"context"
+
 	"github.com/goark/errs"
 	"github.com/goark/koyomi/value"
 	ics "github.com/spiegel-im-spiegel/ics-golang"
@@ -57,7 +59,7 @@ func WithTempDir(dir string) optFunc {
 }
 
 // Get returns koyomi data from calendar dources
-func (s *Source) Get() (*Koyomi, error) {
+func (s *Source) Get(ctx context.Context) (*Koyomi, error) {
 	if s == nil {
 		return nil, errs.Wrap(ErrNullPointer)
 	}
@@ -68,41 +70,49 @@ func (s *Source) Get() (*Koyomi, error) {
 	if len(s.tempDir) > 0 {
 		ics.FilePath = s.tempDir
 	}
-	for _, cid := range s.cids {
-		es, err := getFrom(cid, s.start, s.end)
-		if err != nil {
-			return nil, errs.Wrap(err)
-		}
-		k.append(es...)
+	es, err := getFrom(ctx, s.cids, s.start, s.end)
+	if err != nil {
+		return nil, errs.Wrap(err)
 	}
+	k.append(es...)
 	k.SortByDate()
 	return k, nil
 }
 
-func getFrom(cid CalendarID, start, end value.DateJp) ([]Event, error) {
-	url := cid.URL()
-	if len(url) == 0 {
-		return nil, errs.Wrap(ErrNoData, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
+func getFrom(ctx context.Context, cids []CalendarID, start, end value.DateJp) ([]Event, error) {
+	parser := ics.New(ctx)
+	for _, cid := range cids {
+		url := cid.URL()
+		if len(url) == 0 {
+			return nil, errs.Wrap(ErrNoData, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
+		}
+		if err := parser.Submit(url); err != nil {
+			return nil, errs.Wrap(err, errs.WithContext("url", url))
+		}
 	}
-	parser := ics.New()
-	pch := parser.GetInputChan()
-	pch <- url
-	parser.Wait()
 
-	calendars, err := parser.GetCalendars()
-	if err != nil {
-		return nil, errs.Wrap(err, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
-	}
+	eventch := parser.GetOutputChan()
 	kevts := []Event{}
-	for _, calendar := range calendars {
-		for _, evt := range calendar.GetEvents() {
+	go func() {
+		for evt := range eventch {
 			e := Event{Date: value.NewDate(evt.GetStart()), Title: evt.GetSummary()}
 			if boundaryIn(e, start, end) {
 				kevts = append(kevts, e)
 			}
 		}
+	}()
+	parser.Wait()
+
+	eerrs, perr := parser.GetErrors()
+	var elist = errs.Errors{}
+	if len(eerrs) > 0 {
+		elist.Add(eerrs...)
 	}
-	return kevts, nil
+	if perr != nil {
+		elist.Add(perr)
+	}
+
+	return kevts, elist.ErrorOrNil()
 }
 
 func boundaryIn(e Event, start, end value.DateJp) bool {
