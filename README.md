@@ -22,7 +22,7 @@ const (
 
 ## インストールと動作要件
 
-- Go 1.25 以上（開発時 toolchain は 1.26.3）
+- Go 1.26 以上（開発時 toolchain は 1.27.3）
 
 ```bash
 go get github.com/goark/koyomi@latest
