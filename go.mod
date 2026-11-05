@@ -6,7 +6,7 @@ toolchain go1.27.3
 
 require (
 	github.com/goark/errs v1.3.4
-	github.com/spiegel-im-spiegel/ics-golang v0.1.3
+	github.com/spiegel-im-spiegel/ics-golang v0.2.1
 )
 
 require (

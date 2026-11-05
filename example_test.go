@@ -2,6 +2,7 @@ package koyomi_test
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -19,12 +20,15 @@ func ExampleKoyomi() {
 		return
 	}
 	defer func() { _ = os.RemoveAll(td) }()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	k, err := koyomi.NewSource(
 		koyomi.WithCalendarID(koyomi.Holiday, koyomi.SolarTerm),
+		// koyomi.WithCalendarID(koyomi.SolarTerm),
 		koyomi.WithStartDate(start),
 		koyomi.WithEndDate(end),
 		koyomi.WithTempDir(td),
-	).Get()
+	).Get(ctx)
 	if err != nil {
 		return
 	}
