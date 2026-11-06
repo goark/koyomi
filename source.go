@@ -2,18 +2,19 @@ package koyomi
 
 import (
 	"context"
+	"sort"
+	"time"
 
+	"github.com/goark/concal"
 	"github.com/goark/errs"
 	"github.com/goark/koyomi/value"
-	ics "github.com/spiegel-im-spiegel/ics-golang"
 )
 
 // Source is information of data source for koyomi
 type Source struct {
-	cids    []CalendarID
-	start   value.DateJp
-	end     value.DateJp
-	tempDir string //temporary directory for github.com/spiegel-im-spiegel/ics-golang package
+	cids  []CalendarID
+	start value.DateJp
+	end   value.DateJp
 }
 
 // optFunc is self-referential function for functional options pattern
@@ -51,13 +52,6 @@ func WithEndDate(end value.DateJp) optFunc {
 	}
 }
 
-// WithTempDir returns function for setting Reader
-func WithTempDir(dir string) optFunc {
-	return func(s *Source) {
-		s.tempDir = dir
-	}
-}
-
 // Get returns koyomi data from calendar dources
 func (s *Source) Get(ctx context.Context) (*Koyomi, error) {
 	if s == nil {
@@ -67,9 +61,6 @@ func (s *Source) Get(ctx context.Context) (*Koyomi, error) {
 		return nil, errs.Wrap(ErrNoData)
 	}
 	k := newKoyomi()
-	if len(s.tempDir) > 0 {
-		ics.FilePath = s.tempDir
-	}
 	es, err := getFrom(ctx, s.cids, s.start, s.end)
 	if err != nil {
 		return nil, errs.Wrap(err)
@@ -79,56 +70,41 @@ func (s *Source) Get(ctx context.Context) (*Koyomi, error) {
 	return k, nil
 }
 
-func getFrom(ctx context.Context, cids []CalendarID, start, end value.DateJp) ([]Event, error) {
-	parser := ics.New(ctx)
+func getFrom(ctx context.Context, cids []CalendarID, start, end value.DateJp) (evts []Event, retErr error) {
+	parser := concal.NewParser(
+		concal.WithStartTime((start.Time).Add(1*time.Second)), // add 1 second to start time to avoid boundary issues
+		concal.WithEndTime((end.Time).Add(1*time.Second)),     // add 1 second to end time to avoid boundary issues
+		concal.WithLocationAllDayEvent(value.JST),
+	)
+	cparser := concal.NewConcurrent(ctx, parser)
+	defer func() {
+		if cerr := cparser.Close(); cerr != nil {
+			retErr = errs.Join(retErr, errs.Wrap(cerr))
+		}
+	}()
+
 	for _, cid := range cids {
 		url := cid.URL()
 		if len(url) == 0 {
 			return nil, errs.Wrap(ErrNoData, errs.WithContext("cid", int(cid)), errs.WithContext("start", start.String()), errs.WithContext("end", end.String()))
 		}
-		if err := parser.Submit(url); err != nil {
+		if err := cparser.Submit(url); err != nil {
 			return nil, errs.Wrap(err, errs.WithContext("url", url))
 		}
 	}
+	go cparser.Wait() // start waiting in a separate goroutine
 
-	eventch := parser.GetOutputChan()
 	kevts := []Event{}
-	go func() {
-		for evt := range eventch {
-			e := Event{Date: value.NewDate(evt.GetStart()), Title: evt.GetSummary()}
-			if boundaryIn(e, start, end) {
-				kevts = append(kevts, e)
-			}
-		}
-	}()
-	parser.Wait()
-
-	eerrs, perr := parser.GetErrors()
-	var elist = errs.Errors{}
-	if len(eerrs) > 0 {
-		elist.Add(eerrs...)
+	for evt := range cparser.Events() {
+		kevts = append(kevts, Event{Date: value.NewDate(*evt.Start), Title: evt.Summary})
 	}
-	if perr != nil {
-		elist.Add(perr)
-	}
-
-	return kevts, elist.ErrorOrNil()
+	sort.Slice(kevts, func(i, j int) bool {
+		return kevts[i].Date.Before(kevts[j].Date) && kevts[i].Title < kevts[j].Title
+	})
+	return kevts, nil
 }
 
-func boundaryIn(e Event, start, end value.DateJp) bool {
-	if e.Date.IsZero() {
-		return false
-	}
-	if !start.IsZero() && e.Date.Before(start) {
-		return false
-	}
-	if !end.IsZero() && e.Date.After(end) {
-		return false
-	}
-	return true
-}
-
-/* Copyright 2020-2023 Spiegel
+/* Copyright 2020-2026 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
