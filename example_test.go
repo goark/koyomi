@@ -27,7 +27,6 @@ func ExampleKoyomi() {
 		// koyomi.WithCalendarID(koyomi.SolarTerm),
 		koyomi.WithStartDate(start),
 		koyomi.WithEndDate(end),
-		koyomi.WithTempDir(td),
 	).Get(ctx)
 	if err != nil {
 		return
@@ -54,7 +53,7 @@ func ExampleKoyomi() {
 	//"2019-05-21","小満"
 }
 
-/* Copyright 2020-2025 Spiegel
+/* Copyright 2020-2026 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
